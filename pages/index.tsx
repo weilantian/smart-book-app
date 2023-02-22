@@ -1,10 +1,16 @@
-import { Button } from "ui";
+import { Button } from "@mantine/core";
+import { FC } from "react";
+import Layout from "../components/Layout";
+import { NextPageWithLayout } from "./_app";
 
-export default function Web() {
+const Web: NextPageWithLayout = () => {
   return (
     <div>
-      <h1>Web</h1>
-      <Button />
+      <Button>A cool button</Button>
     </div>
   );
-}
+};
+
+Web.getLayout = (page) => <Layout>{page}</Layout>;
+
+export default Web;
