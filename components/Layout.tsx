@@ -1,4 +1,17 @@
-import { AppShell, Navbar, Header } from "@mantine/core";
+import {
+  AppShell,
+  Navbar,
+  Header,
+  Stack,
+  createStyles,
+  Text,
+  Burger,
+  MediaQuery,
+  Group,
+  Button,
+} from "@mantine/core";
+import { NextLink } from "@mantine/next";
+import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
 
 const Layout: FC<PropsWithChildren<{}>> = ({ children }) => {
@@ -7,12 +20,29 @@ const Layout: FC<PropsWithChildren<{}>> = ({ children }) => {
       padding="md"
       navbar={
         <Navbar width={{ base: 300 }} p="xs">
-          {/* Navbar content */}
+          <Navbar.Section>{/* Header with logo */}</Navbar.Section>
+          <Navbar.Section grow mt="md">
+            {/* Links sections */}
+          </Navbar.Section>
+          <Navbar.Section>{/* Footer with user */}111</Navbar.Section>
         </Navbar>
       }
       header={
-        <Header height={60} p="xs">
-          SmartBook
+        <Header height={{ base: 50, md: 70 }} p="md">
+          <Group
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
+              width: "100%",
+            }}
+            position="apart"
+          >
+            <Text weight={700}>SmartBook</Text>
+            <Link href="/signin">
+              <Button>Create Event</Button>
+            </Link>
+          </Group>
         </Header>
       }
       styles={(theme) => ({
