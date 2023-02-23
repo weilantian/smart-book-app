@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const useIsAuthorized = () => {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(true);
 
   useEffect(
     () =>

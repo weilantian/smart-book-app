@@ -1,10 +1,18 @@
 import { Button, Container, SimpleGrid, Stack, Title } from "@mantine/core";
-import { FC } from "react";
+import { useRouter } from "next/router";
+import { FC, useEffect } from "react";
 import EventCard from "../components/EventCard";
 import Layout from "../components/Layout";
+import useIsAuthorized from "../hooks/useIsAuthroized";
 import { NextPageWithLayout } from "./_app";
 
 const Web: NextPageWithLayout = () => {
+  const router = useRouter();
+  const { isAuthorized } = useIsAuthorized();
+  useEffect(() => {
+    if (isAuthorized) return;
+    router.push("/signin");
+  }, [isAuthorized, router]);
   return (
     <Container
       size="md"
