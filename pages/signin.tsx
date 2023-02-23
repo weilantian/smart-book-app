@@ -83,6 +83,7 @@ const LoginPage: NextPage = () => {
                   password: input.password,
                 });
               } else {
+                //@ts-ignore
                 mutate({
                   email: input.email,
                   password: input.password,

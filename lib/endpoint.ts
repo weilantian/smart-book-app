@@ -1,5 +1,10 @@
 import axios from "axios";
-import { LoginDto, type SignupDto } from "./models";
+import {
+  type LoginDto,
+  type UserInfo,
+  type SignupDto,
+  type Event,
+} from "./models";
 
 export const isAuthorized = () =>
   localStorage.getItem("smart_book_token") ? true : false;
@@ -21,4 +26,12 @@ export const signup = async (dto: SignupDto) =>
 export const login = async (dto: LoginDto) =>
   await axiosInstance.post("/auth/login", dto);
 
-export const getCurrentUser = async () => await axiosInstance.get("/user/me");
+export const getCurrentUser = async () =>
+  await axiosInstance.get<UserInfo>("/user/me");
+
+export const getUserManagedEvents = async (showEnded: boolean) =>
+  await axiosInstance.get<Array<Event>>("/event/user-managed-events", {
+    params: {
+      showEnded,
+    },
+  });

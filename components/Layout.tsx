@@ -13,8 +13,10 @@ import {
 import { NextLink } from "@mantine/next";
 import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
+import useCurrentUser from "../hooks/useCurrentUser";
 
 const Layout: FC<PropsWithChildren<{}>> = ({ children }) => {
+  const { data } = useCurrentUser();
   return (
     <AppShell
       padding="md"
@@ -24,7 +26,10 @@ const Layout: FC<PropsWithChildren<{}>> = ({ children }) => {
           <Navbar.Section grow mt="md">
             {/* Links sections */}
           </Navbar.Section>
-          <Navbar.Section>{/* Footer with user */}111</Navbar.Section>
+          <Navbar.Section>
+            {/* Footer with user */}
+            {data?.data.name}
+          </Navbar.Section>
         </Navbar>
       }
       header={

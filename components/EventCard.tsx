@@ -10,6 +10,8 @@ import {
 } from "@mantine/core";
 import { IconUser, IconCalendar, IconDots } from "@tabler/icons-react";
 import { FC } from "react";
+import { EventStatus } from "../lib/models";
+import { computeStatusName } from "../lib/utils";
 
 const useStyles = createStyles((theme) => ({
   icon: {
@@ -28,7 +30,12 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const EventCard: FC = () => {
+const EventCard: FC<{
+  name: string;
+  status: EventStatus;
+  participators: number;
+  slots: number;
+}> = ({ name, participators, slots, status }) => {
   const { classes } = useStyles();
   return (
     <Card p="lg" radius="md" withBorder>
@@ -44,9 +51,9 @@ const EventCard: FC = () => {
         />
       </Card.Section>
       <Group position="apart" mt="md" mb="xs">
-        <Text weight={500}>Event Name</Text>
+        <Text weight={500}>{name}</Text>
         <Badge color="blue" variant="light">
-          Active
+          {computeStatusName(status)}
         </Badge>
       </Group>
       <Group className={classes.detailContainer} spacing={8} mb={-8}>
