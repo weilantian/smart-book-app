@@ -16,7 +16,7 @@ export interface UserInfo {
 }
 
 export enum EventStatus {
-  ALLIABLE = "ALLIABLE",
+  AVAILABLE = "AVAILABLE",
   FULL = "FULL",
   ENDED = "ENDED",
 }

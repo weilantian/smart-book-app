@@ -2,8 +2,8 @@ import { EventStatus } from "./models";
 
 export const computeStatusName = (status: EventStatus) => {
   switch (status) {
-    case "ALLIABLE":
-      return "Alliable";
+    case "AVAILABLE":
+      return "Available";
     case "FULL":
       return "Full";
     case "ENDED":
