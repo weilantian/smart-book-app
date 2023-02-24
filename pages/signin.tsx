@@ -14,7 +14,7 @@ import { NextPage } from "next";
 import { useToggle } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useMutation } from "@tanstack/react-query";
-import { login, signup } from "../lib/endpoint";
+import { login, signup, updateToken } from "../lib/endpoint";
 import { useRouter } from "next/router";
 
 const useStyles = createStyles((theme) => ({
@@ -38,6 +38,7 @@ const LoginPage: NextPage = () => {
     mutationFn: type == "register" ? signup : login,
     onSuccess: ({ data }) => {
       localStorage.setItem("smart_book_token", data.access_token);
+      updateToken(data.access_token);
       router.push("/");
     },
     onError: (error) => console.log(error),

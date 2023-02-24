@@ -9,11 +9,13 @@ import {
   MediaQuery,
   Group,
   Button,
+  Menu,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
 import useCurrentUser from "../hooks/useCurrentUser";
+import User from "./Nav/User";
 
 const Layout: FC<PropsWithChildren<{}>> = ({ children }) => {
   const { data } = useCurrentUser();
@@ -27,8 +29,9 @@ const Layout: FC<PropsWithChildren<{}>> = ({ children }) => {
             {/* Links sections */}
           </Navbar.Section>
           <Navbar.Section>
-            {/* Footer with user */}
-            {data?.data.name}
+            {data?.data && (
+              <User email={data?.data.email} name={data?.data.name} />
+            )}
           </Navbar.Section>
         </Navbar>
       }

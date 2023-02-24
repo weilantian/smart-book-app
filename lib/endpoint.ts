@@ -20,6 +20,13 @@ const axiosInstance = axios.create({
   },
 });
 
+//create a function that updates the token in the header
+export const updateToken = (token: string) => {
+  Object.assign(axiosInstance.defaults, {
+    headers: { Authorization: "Bearer " + token },
+  });
+};
+
 export const signup = async (dto: SignupDto) =>
   await axiosInstance.post("/auth/signup", dto);
 
