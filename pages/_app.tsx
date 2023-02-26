@@ -7,6 +7,7 @@ import { ReactElement, ReactNode } from "react";
 import RouterTransition from "../components/RouterTransition";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
+import { ModalsProvider } from "@mantine/modals";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -30,8 +31,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <MantineProvider withGlobalStyles withNormalizeCSS>
-          <RouterTransition />
-          {getLayout(<Component {...pageProps} />)}
+          <ModalsProvider>
+            <RouterTransition />
+            {getLayout(<Component {...pageProps} />)}
+          </ModalsProvider>
         </MantineProvider>
       </QueryClientProvider>
     </>

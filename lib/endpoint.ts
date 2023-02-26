@@ -42,3 +42,11 @@ export const getUserManagedEvents = async (showEnded: boolean) =>
       showEnded,
     },
   });
+
+export const createEvent = (eventName: string) =>
+  axiosInstance.post<Event>("/event/create", {
+    name: eventName,
+  });
+
+export const deleteEvent = (eventId: string) =>
+  axiosInstance.delete(`/event/${eventId}`);

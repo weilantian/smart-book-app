@@ -46,6 +46,7 @@ const ManagedEvents = () => {
       <SimpleGrid spacing="lg" cols={3}>
         {data?.data.map((event) => (
           <EventCard
+            id={event.id}
             participators={event.participatorNum}
             status={event.status}
             key={event.id}

@@ -7,9 +7,13 @@ import {
   Badge,
   Button,
   Center,
+  Menu,
 } from "@mantine/core";
+import { openConfirmModal } from "@mantine/modals";
 import { IconUser, IconCalendar, IconDots } from "@tabler/icons-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
+import { deleteEvent } from "../lib/endpoint";
 import { EventStatus } from "../lib/models";
 import { computeStatusName } from "../lib/utils";
 
@@ -31,12 +35,33 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const EventCard: FC<{
+  id: string;
   name: string;
   status: EventStatus;
   participators: number;
   slots: number;
-}> = ({ name, participators, slots, status }) => {
+}> = ({ name, participators, slots, status, id }) => {
   const { classes } = useStyles();
+  const queryClient = useQueryClient();
+
+  const { mutate: mutateDeleteEvent, isLoading } = useMutation({
+    mutationFn: deleteEvent,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["user-managed-events"] }),
+  });
+
+  const openDeleteConfirmationModal = () =>
+    openConfirmModal({
+      title: "Delete Event",
+      children: <Text>Are you sure you want to delete this event?</Text>,
+      confirmProps: { color: "red" },
+      labels: {
+        confirm: "Delete",
+        cancel: "Cancel",
+      },
+      onConfirm: () => mutateDeleteEvent(id),
+    });
+
   return (
     <Card p="lg" radius="md" withBorder>
       <Card.Section
@@ -70,9 +95,19 @@ const EventCard: FC<{
         <div></div>
         <Group spacing="sm">
           <Button>Manage</Button>
-          <Button p="sm" variant="default">
-            <IconDots size="18" />
-          </Button>
+          <Menu shadow="md" withArrow width={200}>
+            <Menu.Target>
+              <Button p="sm" variant="default">
+                <IconDots size="18" />
+              </Button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Item onClick={openDeleteConfirmationModal}>
+                Delete Project
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </Group>
       </Group>
     </Card>
