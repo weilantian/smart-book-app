@@ -23,7 +23,7 @@ const useStyles = createStyles((theme) => ({
         : theme.colors.gray[0],
     width: "100%",
     height: "100vh",
-
+    boxSizing: "border-box",
     overflow: "hidden",
   },
   inner: {
@@ -46,12 +46,14 @@ const useStyles = createStyles((theme) => ({
   },
   sideBar: {
     minWidth: 350,
+    boxSizing: "border-box",
   },
   main: {
     flexGrow: 1,
     width: "100%",
     overflowX: "scroll",
     overflowY: "hidden",
+    boxSizing: "border-box",
   },
 }));
 

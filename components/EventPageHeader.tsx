@@ -6,6 +6,7 @@ import {
   Button,
   UnstyledButton,
   Switch,
+  Badge,
 } from "@mantine/core";
 import { IconCalendarEvent, IconDots } from "@tabler/icons-react";
 
@@ -50,6 +51,7 @@ const EventPageHeader = () => {
           <IconCalendarEvent />
         </Box>
         <Text weight="bold">React London 2023</Text>
+        <Badge color="gray">Read Only</Badge>
         <UnstyledButton className={classes.functionalButton}>
           <IconDots />
         </UnstyledButton>
