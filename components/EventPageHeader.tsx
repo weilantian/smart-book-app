@@ -8,13 +8,18 @@ import {
   Switch,
   Badge,
 } from "@mantine/core";
-import { IconCalendarEvent, IconDots } from "@tabler/icons-react";
+import {
+  IconCalendarEvent,
+  IconDots,
+  IconEdit,
+  IconShare,
+} from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
   container: {
-    marginTop: theme.spacing.sm,
-    marginRight: theme.spacing.md,
-    marginLeft: theme.spacing.md,
+    paddingTop: theme.spacing.sm,
+    paddingRight: theme.spacing.md,
+    paddingLeft: theme.spacing.md,
   },
   iconContainer: {
     backgroundColor: theme.colors.blue[2],
@@ -52,9 +57,18 @@ const EventPageHeader = () => {
         </Box>
         <Text weight="bold">React London 2023</Text>
         <Badge color="gray">Read Only</Badge>
+
         <UnstyledButton className={classes.functionalButton}>
           <IconDots />
         </UnstyledButton>
+      </Group>
+      <Group spacing="sm">
+        <Button leftIcon={<IconEdit size={18} />} size="sm">
+          Edit
+        </Button>
+        <Button leftIcon={<IconShare size={18} />} size="sm">
+          Share
+        </Button>
       </Group>
     </Group>
   );

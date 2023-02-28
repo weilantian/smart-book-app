@@ -14,10 +14,25 @@ const Cell = () => {
     <Box
       sx={(theme) => ({
         height: 80,
-        border: `1px solid ${
+        borderLeft: `1px solid ${
           theme.colorScheme === "dark"
             ? theme.colors.dark[6]
             : theme.colors.gray[2]
+        }`,
+        borderRight: `1px solid ${
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[6]
+            : theme.colors.gray[2]
+        }`,
+        borderBottom: `1px solid ${
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[7]
+            : theme.colors.gray[1]
+        }`,
+        borderTop: `1px solid ${
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[7]
+            : theme.colors.gray[1]
         }`,
       })}
     ></Box>
@@ -37,10 +52,10 @@ const CalendarRow: FC<{
       span={1}
     >
       <Box onMouseDown={() => {}}>
-        {Array(24)
+        {Array(23)
           .fill(0)
           .map((_, i) => (
-            <Cell />
+            <Cell key={i} />
           ))}
       </Box>
     </Grid.Col>

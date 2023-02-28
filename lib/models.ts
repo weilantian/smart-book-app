@@ -21,7 +21,14 @@ export enum EventStatus {
   ENDED = "ENDED",
 }
 
+export enum Role {
+  CREATOR = "CREATOR",
+  HOST = "HOST",
+  PARTICIPATOR = "PARTICIPATOR",
+}
+
 export interface Event {
+  role?: Role;
   id: string;
   name: string;
   status: EventStatus;
@@ -30,4 +37,24 @@ export interface Event {
   participators?: Array<UserInfo>;
   creator?: UserInfo;
   hosts?: Array<UserInfo>;
+  slots?: Array<Slot>;
+}
+
+export interface CreateSlotDto {
+  eventId: string;
+  availableParticipatorNum: number;
+  startDate: Date;
+  endDate: Date;
+  booking: boolean;
+}
+
+export interface Slot {
+  id: string;
+  availableParticipatorNum: number;
+  startDate: Date;
+  endDate: Date;
+  booking: boolean;
+  participators?: Array<UserInfo>;
+  creator?: UserInfo;
+  event?: Event;
 }

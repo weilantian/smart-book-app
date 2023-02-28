@@ -1,11 +1,14 @@
 import {
   Box,
+  Button,
   Container,
   createStyles,
+  Divider,
   Grid,
   Group,
   Paper,
   Stack,
+  Title,
 } from "@mantine/core";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
@@ -17,6 +20,7 @@ const useStyles = createStyles((theme) => ({
   container: {
     display: "flex",
     flexDirection: "column",
+
     backgroundColor:
       theme.colorScheme === "dark"
         ? theme.colors.dark[7]
@@ -24,35 +28,39 @@ const useStyles = createStyles((theme) => ({
     width: "100%",
     height: "100vh",
     boxSizing: "border-box",
-    overflow: "hidden",
   },
   inner: {
-    marginTop: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
-    marginLeft: theme.spacing.lg,
-    marginRight: theme.spacing.lg,
+    flex: 1,
+    gap: 14,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
+    paddingLeft: theme.spacing.lg,
+    paddingRight: theme.spacing.lg,
     display: "flex",
     boxSizing: "border-box",
-    height: "100%",
+
     alignItems: "stretch",
   },
   paper: {
     boxSizing: "border-box",
-    flexBasis: 0,
+
     padding: theme.spacing.md,
     borderRadius: theme.radius.md,
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.white,
   },
   sideBar: {
-    minWidth: 350,
+    gap: 18,
+    display: "flex",
+    flexDirection: "column",
+    width: 350,
     boxSizing: "border-box",
   },
   main: {
-    flexGrow: 1,
+    flex: 1,
     width: "100%",
-    overflowX: "scroll",
-    overflowY: "hidden",
+    display: "flex",
+    flexDirection: "column",
     boxSizing: "border-box",
   },
 }));
@@ -67,35 +75,44 @@ const EventPage: FC = () => {
     <div className={classes.container}>
       <EventPageHeader />
 
-      <Group className={classes.inner}>
+      <div className={classes.inner}>
         <Paper className={cx(classes.paper, classes.sideBar)}>
-          <Stack
+          <Calendar onChange={setSelectedDate} value={selectedDate} size="md" />
+          <Box
             sx={{
-              height: "100%",
+              flex: 1,
+              flexDirection: "column",
+              display: "flex",
             }}
-            justify="space-between"
           >
-            <Calendar
-              onChange={setSelectedDate}
-              value={selectedDate}
-              size="md"
-            />
+            <Divider my="sm" />
+            <Group
+              sx={{
+                marginBottom: 12,
+              }}
+              position="apart"
+            >
+              <Title order={4}>Slots</Title>
+              <Button size="xs" variant="light">
+                Add
+              </Button>
+            </Group>
             <Box
               sx={{
-                paddingLeft: 10,
-                paddingRight: 10,
-                flexGrow: 1,
+                flex: 1,
+
                 overflowY: "scroll",
+                minHeight: 0,
               }}
             >
-              1
+              <Stack style={{ height: 100 }}></Stack>
             </Box>
-          </Stack>
+          </Box>
         </Paper>
         <Paper className={cx(classes.paper, classes.main)}>
           <EventManager setDate={setSelectedDate} selectedDate={selectedDate} />
         </Paper>
-      </Group>
+      </div>
     </div>
   );
 };

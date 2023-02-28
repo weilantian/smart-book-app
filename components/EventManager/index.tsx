@@ -14,10 +14,10 @@ import { FC, useState } from "react";
 
 const useStyles = createStyles((theme) => ({
   container: {
+    display: "flex",
+    flexDirection: "column",
     width: "100%",
-
-    paddingTop: theme.spacing.md,
-    height: 800,
+    flex: 1,
   },
   cellHeader: {
     top: 120,
@@ -27,6 +27,11 @@ const useStyles = createStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  scrollInner: {
+    width: "100%",
+    display: "flex",
+    height: 300,
   },
 }));
 
@@ -44,9 +49,16 @@ const EventManager: FC<{
   });
 
   return (
-    <Box>
-      <Group position="right">
+    <Box className={classes.container}>
+      <Group
+        spacing="xs"
+        sx={{
+          marginBottom: 18,
+        }}
+        position="right"
+      >
         <Button
+          size="xs"
           onClick={() =>
             setDate(
               new Date(
@@ -57,8 +69,11 @@ const EventManager: FC<{
         >
           <IconChevronLeft />
         </Button>
-        <Button onClick={() => setDate(new Date())}>Today</Button>
+        <Button size="xs" onClick={() => setDate(new Date())}>
+          Today
+        </Button>
         <Button
+          size="xs"
           onClick={() =>
             setDate(
               new Date(
@@ -70,50 +85,63 @@ const EventManager: FC<{
           <IconChevronRight />
         </Button>
       </Group>
-      <Flex className={classes.container}>
-        <Stack
+
+      <Stack
+        sx={{
+          flex: 1,
+        }}
+      >
+        <Box
           sx={{
-            flexGrow: 1,
+            marginLeft: 60,
           }}
         >
-          <Box
-            sx={{
-              marginLeft: 60,
-            }}
-          >
-            <Grid className={classes.cellHeader} columns={7}>
-              {currentWeek.map((date) => (
-                <Grid.Col span={1}>
+          <Grid className={classes.cellHeader} columns={7}>
+            {currentWeek.map((date) => {
+              const day = date.toLocaleString("en-US", { day: "numeric" });
+              const isToday =
+                day === new Date().toLocaleString("en-US", { day: "numeric" });
+              return (
+                <Grid.Col key={date.toString()} span={1}>
                   <Box className={classes.cellHeaderItem}>
                     <Text color="gray">
                       {date.toLocaleString("en-US", { weekday: "short" })}
                     </Text>
-                    <Text size={24}>
-                      {date.toLocaleString("en-US", { day: "numeric" })}
+                    <Text
+                      weight={isToday ? "bold" : "regular"}
+                      color={isToday ? "blue" : "gray"}
+                      size={24}
+                    >
+                      {day}
                     </Text>
                   </Box>
                 </Grid.Col>
-              ))}
-            </Grid>
-          </Box>
-          <Flex
-            sx={{
-              flexGrow: 1,
-              overflowY: "scroll",
-              overflowX: "hidden",
-            }}
-          >
+              );
+            })}
+          </Grid>
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: "scroll",
+            overflowX: "hidden",
+            minHeight: 0,
+            flexDirection: "column",
+          }}
+        >
+          <Box className={classes.scrollInner}>
             <Stack
               spacing={80}
               sx={{
                 paddingRight: 10,
-                marginTop: 70,
+                paddingTop: 14,
               }}
             >
               {Array(24)
                 .fill(0)
                 .map((_, i) => (
                   <Text
+                    key={i}
                     sx={{
                       lineHeight: 0,
                     }}
@@ -126,8 +154,8 @@ const EventManager: FC<{
             </Stack>
             <Box
               sx={{
-                flexGrow: 1,
-                paddingBottom: 100,
+                flex: 1,
+                paddingTop: 20,
               }}
             >
               <Grid columns={7}>
@@ -139,10 +167,16 @@ const EventManager: FC<{
                 <CalenderRow day={1} name="Monday" />
                 <CalenderRow day={1} name="Monday" />
               </Grid>
+              <div
+                style={{
+                  width: "100%",
+                  height: 40,
+                }}
+              ></div>
             </Box>
-          </Flex>
-        </Stack>
-      </Flex>
+          </Box>
+        </Box>
+      </Stack>
     </Box>
   );
 };
