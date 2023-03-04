@@ -36,8 +36,6 @@ export interface Event {
   coverImgUrl: string;
   participators?: Array<UserInfo>;
   creator?: UserInfo;
-  hosts?: Array<UserInfo>;
-  slots?: Array<Slot>;
 }
 
 export interface CreateSlotDto {

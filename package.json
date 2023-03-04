@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@douyinfe/semi-ui": "^2.30.1",
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
     "@mantine/core": "^5.10.4",
@@ -20,10 +21,11 @@
     "@mantine/notifications": "^5.10.4",
     "@mantine/nprogress": "^5.10.4",
     "@mantine/spotlight": "^5.10.4",
+    "@tabler/icons-react": "^2.4.0",
     "@tanstack/react-query": "^4.24.10",
     "axios": "^1.3.4",
     "dayjs": "^1.11.7",
-    "@tabler/icons-react": "^2.4.0",
+    "mantine-datetime-picker": "^1.1.7",
     "next": "^13.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

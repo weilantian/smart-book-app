@@ -1,4 +1,9 @@
 module.exports = {
   reactStrictMode: true,
-  transpilePackages: ["ui"],
+  transpilePackages: [
+    "ui",
+    "@douyinfe/semi-ui",
+    "@douyinfe/semi-icons",
+    "@douyinfe/semi-illustrations",
+  ],
 };

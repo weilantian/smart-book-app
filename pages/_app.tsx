@@ -8,6 +8,8 @@ import RouterTransition from "../components/RouterTransition";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { ModalsProvider } from "@mantine/modals";
+import { LocaleProvider } from "@douyinfe/semi-ui";
+import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -32,8 +34,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <MantineProvider withGlobalStyles withNormalizeCSS>
           <ModalsProvider>
-            <RouterTransition />
-            {getLayout(<Component {...pageProps} />)}
+            <LocaleProvider locale={en_US}>
+              <RouterTransition />
+              {getLayout(<Component {...pageProps} />)}
+            </LocaleProvider>
           </ModalsProvider>
         </MantineProvider>
       </QueryClientProvider>
