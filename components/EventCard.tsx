@@ -12,6 +12,7 @@ import {
 import { openConfirmModal } from "@mantine/modals";
 import { IconUser, IconCalendar, IconDots } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import { FC } from "react";
 import { deleteEvent } from "../lib/endpoint";
 import { EventStatus } from "../lib/models";
@@ -94,7 +95,10 @@ const EventCard: FC<{
       <Group mt="xl" position="apart" align="end">
         <div></div>
         <Group spacing="sm">
-          <Button>Manage</Button>
+          <Link href={`/event/${id}`}>
+            <Button>Manage</Button>
+          </Link>
+
           <Menu shadow="md" withArrow width={200}>
             <Menu.Target>
               <Button p="sm" variant="default">

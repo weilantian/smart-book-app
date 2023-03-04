@@ -1,20 +1,30 @@
 import {
   Box,
   Button,
+  Checkbox,
   Container,
   createStyles,
   Divider,
   Grid,
   Group,
+  Modal,
+  NumberInput,
   Paper,
   Stack,
+  Switch,
   Title,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { ComponentProps, FC, useEffect, useState } from "react";
 import EventPageHeader from "../../components/EventPageHeader";
-import { Calendar } from "@mantine/dates";
+import { Calendar, TimeInput } from "@mantine/dates";
 import EventManager from "../../components/EventManager";
+import { useForm } from "@mantine/form";
+
+import { DatePicker } from "@douyinfe/semi-ui";
+import CreateSlotModal from "../../components/Modal/CreateSlotModal";
+import { useQuery } from "@tanstack/react-query";
+import { getEvent, getSlotsOfEvent } from "../../lib/endpoint";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -50,10 +60,10 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.white,
   },
   sideBar: {
-    gap: 18,
+    gap: 0,
     display: "flex",
     flexDirection: "column",
-    width: 350,
+    width: 310,
     boxSizing: "border-box",
   },
   main: {
@@ -65,19 +75,41 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+const SlotList: FC<{ eventId: string }> = ({ eventId }) => {
+  const { data } = useQuery({
+    queryKey: ["slots", { eventId }],
+    queryFn: () => getSlotsOfEvent(eventId),
+  });
+  return (
+    <Stack style={{ height: 100 }}>
+      {data?.data.map((slot) => (
+        <Box key={slot.id}>{slot.startDate.toString()}</Box>
+      ))}
+    </Stack>
+  );
+};
+
 const EventPage: FC = () => {
+  const [creatingSlot, setCreatingSlot] = useState(false);
   //TODO: Manege if the user is editing or not
   const [editing, setEditing] = useState(false);
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const { classes, cx } = useStyles();
+  const eventId = router.query.id as string;
+
   return (
     <div className={classes.container}>
-      <EventPageHeader />
+      <CreateSlotModal
+        eventId={eventId}
+        onClose={() => setCreatingSlot(false)}
+        opened={creatingSlot}
+      />
+      <EventPageHeader eventId={eventId} />
 
       <div className={classes.inner}>
         <Paper className={cx(classes.paper, classes.sideBar)}>
-          <Calendar onChange={setSelectedDate} value={selectedDate} size="md" />
+          <Calendar onChange={setSelectedDate} value={selectedDate} size="sm" />
           <Box
             sx={{
               flex: 1,
@@ -93,7 +125,11 @@ const EventPage: FC = () => {
               position="apart"
             >
               <Title order={4}>Slots</Title>
-              <Button size="xs" variant="light">
+              <Button
+                onClick={() => setCreatingSlot(true)}
+                size="xs"
+                variant="light"
+              >
                 Add
               </Button>
             </Group>
@@ -105,7 +141,7 @@ const EventPage: FC = () => {
                 minHeight: 0,
               }}
             >
-              <Stack style={{ height: 100 }}></Stack>
+              <SlotList eventId={eventId} />
             </Box>
           </Box>
         </Paper>

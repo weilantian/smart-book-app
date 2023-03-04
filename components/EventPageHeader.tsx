@@ -14,6 +14,9 @@ import {
   IconEdit,
   IconShare,
 } from "@tabler/icons-react";
+import { useQuery } from "@tanstack/react-query";
+import { FC } from "react";
+import { getEvent } from "../lib/endpoint";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -47,7 +50,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const EventPageHeader = () => {
+const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
+  const { data } = useQuery({
+    queryFn: () => getEvent(eventId),
+    queryKey: ["event", eventId],
+  });
   const { classes } = useStyles();
   return (
     <Group className={classes.container} align="center" position="apart">
@@ -55,7 +62,7 @@ const EventPageHeader = () => {
         <Box className={classes.iconContainer}>
           <IconCalendarEvent />
         </Box>
-        <Text weight="bold">React London 2023</Text>
+        <Text weight="bold">{data?.data?.name}</Text>
         <Badge color="gray">Read Only</Badge>
 
         <UnstyledButton className={classes.functionalButton}>
