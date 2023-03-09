@@ -19,7 +19,8 @@ import { useRouter } from "next/router";
 
 const useStyles = createStyles((theme) => ({
   page: {
-    background: theme.colors.gray[1],
+    background:
+      theme.colorScheme === "dark" ? theme.colors.dark : theme.colors.gray[1],
     height: "100vh",
   },
   inner: {
