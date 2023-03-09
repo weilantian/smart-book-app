@@ -3,7 +3,7 @@ import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 import Layout from "../components/Layout";
 import { NextPage } from "next";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import RouterTransition from "../components/RouterTransition";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
@@ -22,6 +22,10 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const [queryClient] = useState(() => new QueryClient());
+  useEffect(() => {
+    const body = document.body;
+    body.setAttribute("theme-mode", "dark");
+  }, []);
   return (
     <>
       <Head>
@@ -32,7 +36,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider withGlobalStyles withNormalizeCSS>
+        <MantineProvider
+          theme={{
+            colorScheme: "dark",
+          }}
+          withGlobalStyles
+          withNormalizeCSS
+        >
           <ModalsProvider>
             <LocaleProvider locale={en_US}>
               <RouterTransition />

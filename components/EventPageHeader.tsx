@@ -25,17 +25,26 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: theme.spacing.md,
   },
   iconContainer: {
-    backgroundColor: theme.colors.blue[2],
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.blue[5]
+        : theme.colors.blue[2],
     padding: theme.spacing.xs,
     width: 44,
     height: 44,
     display: "flex",
     alignItems: "center",
     borderRadius: theme.radius.md,
-    color: theme.colors.blue[9],
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.blue[2]
+        : theme.colors.blue[9],
   },
   functionalButton: {
-    backgroundColor: theme.colors.gray[2],
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[4]
+        : theme.colors.gray[2],
     padding: theme.spacing.xs,
     width: 38,
     height: 38,
@@ -43,9 +52,13 @@ const useStyles = createStyles((theme) => ({
     alignItems: "center",
     transition: "background-color 200ms ease",
     borderRadius: theme.radius.xl,
-    color: theme.colors.gray[9],
+    color:
+      theme.colorScheme === "dark" ? theme.colors.white : theme.colors.gray[9],
     "&:hover": {
-      backgroundColor: theme.colors.gray[3],
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[3]
+          : theme.colors.gray[3],
     },
   },
 }));

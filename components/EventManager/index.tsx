@@ -11,6 +11,7 @@ import {
 import CalenderRow from "./CalenderRow";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import DayIndicator from "./DayIndicator";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -104,16 +105,17 @@ const EventManager: FC<{
               return (
                 <Grid.Col key={date.toString()} span={1}>
                   <Box className={classes.cellHeaderItem}>
-                    <Text color="gray">
+                    <Text
+                      sx={(theme) => ({
+                        color:
+                          theme.colorScheme === "dark"
+                            ? theme.colors.dark[3]
+                            : theme.colors.gray[7],
+                      })}
+                    >
                       {date.toLocaleString("en-US", { weekday: "short" })}
                     </Text>
-                    <Text
-                      weight={isToday ? "bold" : "regular"}
-                      color={isToday ? "blue" : "gray"}
-                      size={24}
-                    >
-                      {day}
-                    </Text>
+                    <DayIndicator day={day} highlighted={isToday} />
                   </Box>
                 </Grid.Col>
               );
@@ -133,7 +135,7 @@ const EventManager: FC<{
             <Stack
               spacing={80}
               sx={{
-                paddingRight: 10,
+                paddingRight: 14,
                 paddingTop: 14,
               }}
             >
@@ -142,10 +144,13 @@ const EventManager: FC<{
                 .map((_, i) => (
                   <Text
                     key={i}
-                    sx={{
+                    sx={(theme) => ({
                       lineHeight: 0,
-                    }}
-                    color="gray"
+                      color:
+                        theme.colorScheme === "dark"
+                          ? theme.colors.dark[3]
+                          : theme.colors.gray[7],
+                    })}
                     align="end"
                   >
                     {i}:00

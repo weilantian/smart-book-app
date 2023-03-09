@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import {
   type LoginDto,
   type UserInfo,
@@ -21,6 +21,20 @@ const axiosInstance = axios.create({
         : undefined,
   },
 });
+
+// const handleResponse = <T = any, R = AxiosResponse<T>>(request: Promise<R>) => {
+//   return request
+//     .then((response) => {
+//       return response.data;
+//     })
+//     .catch((error) => {
+//       if (error.response) {
+//         return Promise.reject(error.response.data);
+//       } else {
+//         return Promise.reject(error);
+//       }
+//     });
+// };
 
 //create a function that updates the token in the header
 export const updateToken = (token: string) => {

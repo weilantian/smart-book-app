@@ -57,7 +57,7 @@ const useStyles = createStyles((theme) => ({
     padding: theme.spacing.md,
     borderRadius: theme.radius.md,
     backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.white,
+      theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.white,
   },
   sideBar: {
     gap: 0,

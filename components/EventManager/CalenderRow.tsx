@@ -16,22 +16,22 @@ const Cell = () => {
         height: 80,
         borderLeft: `1px solid ${
           theme.colorScheme === "dark"
-            ? theme.colors.dark[6]
+            ? theme.colors.dark[4]
             : theme.colors.gray[2]
         }`,
         borderRight: `1px solid ${
           theme.colorScheme === "dark"
-            ? theme.colors.dark[6]
+            ? theme.colors.dark[4]
             : theme.colors.gray[2]
         }`,
         borderBottom: `1px solid ${
           theme.colorScheme === "dark"
-            ? theme.colors.dark[7]
+            ? theme.colors.dark[5]
             : theme.colors.gray[1]
         }`,
         borderTop: `1px solid ${
           theme.colorScheme === "dark"
-            ? theme.colors.dark[7]
+            ? theme.colors.dark[5]
             : theme.colors.gray[1]
         }`,
       })}
