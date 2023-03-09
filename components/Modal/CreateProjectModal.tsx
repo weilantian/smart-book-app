@@ -22,7 +22,13 @@ const CreateEventModal: FC<ComponentProps<typeof Modal>> = ({
   return (
     <Modal onClose={onClose} opened={opened} title={"Create New Event"}>
       <Stack>
-        <TextInput required label="Event Name" placeholder="Event Name" />
+        <TextInput
+          value={eventName}
+          onChange={(e) => setEventName(e.currentTarget.value)}
+          required
+          label="Event Name"
+          placeholder="Event Name"
+        />
 
         <Group position="apart">
           <span />

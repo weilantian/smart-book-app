@@ -15,8 +15,11 @@ import {
   IconShare,
 } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
+import { useAtom } from "jotai";
+import Link from "next/link";
 import { FC } from "react";
 import { getEvent } from "../lib/endpoint";
+import bookingDetailStore from "../store/bookingDetailStore";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -34,11 +37,18 @@ const useStyles = createStyles((theme) => ({
     height: 44,
     display: "flex",
     alignItems: "center",
+    transition: "background-color 200ms ease",
     borderRadius: theme.radius.md,
     color:
       theme.colorScheme === "dark"
         ? theme.colors.blue[2]
         : theme.colors.blue[9],
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.blue[4]
+          : theme.colors.blue[3],
+    },
   },
   functionalButton: {
     backgroundColor:
@@ -69,12 +79,18 @@ const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
     queryKey: ["event", eventId],
   });
   const { classes } = useStyles();
+
+  const [bookingDetail, setBookingDetail] = useAtom(bookingDetailStore);
+
   return (
     <Group className={classes.container} align="center" position="apart">
       <Group align="center">
-        <Box className={classes.iconContainer}>
-          <IconCalendarEvent />
-        </Box>
+        <Link href="/">
+          <Box className={classes.iconContainer}>
+            <IconCalendarEvent />
+          </Box>
+        </Link>
+
         <Text weight="bold">{data?.data?.name}</Text>
         <Badge color="gray">Read Only</Badge>
 
@@ -83,9 +99,19 @@ const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
         </UnstyledButton>
       </Group>
       <Group spacing="sm">
-        <Button leftIcon={<IconEdit size={18} />} size="sm">
-          Edit
-        </Button>
+        {!bookingDetail.isEditing &&
+          bookingDetail.userRole !== "PARTICIPATOR" && (
+            <Button
+              onClick={() =>
+                setBookingDetail({ ...bookingDetail, isEditing: true })
+              }
+              leftIcon={<IconEdit size={18} />}
+              size="sm"
+            >
+              Edit
+            </Button>
+          )}
+
         <Button leftIcon={<IconShare size={18} />} size="sm">
           Share
         </Button>
