@@ -110,7 +110,7 @@ const EventManager: FC<{
                         color:
                           theme.colorScheme === "dark"
                             ? theme.colors.dark[3]
-                            : theme.colors.gray[7],
+                            : theme.colors.gray[5],
                       })}
                     >
                       {date.toLocaleString("en-US", { weekday: "short" })}
@@ -133,7 +133,7 @@ const EventManager: FC<{
         >
           <Box className={classes.scrollInner}>
             <Stack
-              spacing={80}
+              spacing={60}
               sx={{
                 paddingRight: 14,
                 paddingTop: 14,
@@ -149,7 +149,7 @@ const EventManager: FC<{
                       color:
                         theme.colorScheme === "dark"
                           ? theme.colors.dark[3]
-                          : theme.colors.gray[7],
+                          : theme.colors.gray[5],
                     })}
                     align="end"
                   >

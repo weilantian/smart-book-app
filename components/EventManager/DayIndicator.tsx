@@ -14,10 +14,11 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.xl,
   },
   selected: {
+    color: "white",
     backgroundColor:
       theme.colorScheme === "dark"
         ? theme.colors.blue[8]
-        : theme.colors.blue[5],
+        : theme.colors.blue[6],
     fontWeight: 500,
   },
 }));

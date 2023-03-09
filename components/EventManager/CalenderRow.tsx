@@ -13,7 +13,7 @@ const Cell = () => {
   return (
     <Box
       sx={(theme) => ({
-        height: 80,
+        height: 60,
         borderLeft: `1px solid ${
           theme.colorScheme === "dark"
             ? theme.colors.dark[4]

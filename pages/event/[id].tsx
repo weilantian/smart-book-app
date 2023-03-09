@@ -7,6 +7,7 @@ import {
   Divider,
   Grid,
   Group,
+  LoadingOverlay,
   Modal,
   NumberInput,
   Paper,
@@ -53,7 +54,9 @@ const useStyles = createStyles((theme) => ({
   },
   paper: {
     boxSizing: "border-box",
-
+    border: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]
+    }`,
     padding: theme.spacing.md,
     borderRadius: theme.radius.md,
     backgroundColor:
@@ -76,12 +79,13 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const SlotList: FC<{ eventId: string }> = ({ eventId }) => {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["slots", { eventId }],
     queryFn: () => getSlotsOfEvent(eventId),
   });
   return (
-    <Stack style={{ height: 100 }}>
+    <Stack pos="relative" style={{ height: 200 }}>
+      <LoadingOverlay visible={isLoading} overlayBlur={2} />
       {data?.data.map((slot) => (
         <Box key={slot.id}>{slot.startDate.toString()}</Box>
       ))}
