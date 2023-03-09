@@ -26,6 +26,7 @@ import { DatePicker } from "@douyinfe/semi-ui";
 import CreateSlotModal from "../../components/Modal/CreateSlotModal";
 import { useQuery } from "@tanstack/react-query";
 import { getEvent, getSlotsOfEvent } from "../../lib/endpoint";
+import SlotList from "../../components/Slots/SlotList";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -77,21 +78,6 @@ const useStyles = createStyles((theme) => ({
     boxSizing: "border-box",
   },
 }));
-
-const SlotList: FC<{ eventId: string }> = ({ eventId }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["slots", { eventId }],
-    queryFn: () => getSlotsOfEvent(eventId),
-  });
-  return (
-    <Stack pos="relative" style={{ height: 200 }}>
-      <LoadingOverlay visible={isLoading} overlayBlur={2} />
-      {data?.data.map((slot) => (
-        <Box key={slot.id}>{slot.startDate.toString()}</Box>
-      ))}
-    </Stack>
-  );
-};
 
 const EventPage: FC = () => {
   const [creatingSlot, setCreatingSlot] = useState(false);

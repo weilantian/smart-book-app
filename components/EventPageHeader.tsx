@@ -74,13 +74,19 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
+  const [bookingDetail, setBookingDetail] = useAtom(bookingDetailStore);
   const { data } = useQuery({
     queryFn: () => getEvent(eventId),
     queryKey: ["event", eventId],
+    onSuccess: (data) => {
+      setBookingDetail({
+        ...bookingDetail,
+        userRole: data.data.role ?? "PARTICIPATOR",
+        id: data.data.id,
+      });
+    },
   });
   const { classes } = useStyles();
-
-  const [bookingDetail, setBookingDetail] = useAtom(bookingDetailStore);
 
   return (
     <Group className={classes.container} align="center" position="apart">
@@ -92,7 +98,7 @@ const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
         </Link>
 
         <Text weight="bold">{data?.data?.name}</Text>
-        <Badge color="gray">Read Only</Badge>
+        {!bookingDetail.isEditing && <Badge color="gray">Read Only</Badge>}
 
         <UnstyledButton className={classes.functionalButton}>
           <IconDots />

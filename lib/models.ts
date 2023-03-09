@@ -13,6 +13,7 @@ export interface UserInfo {
   id: string;
   email: string;
   name: string;
+  profileImgUrl: string;
 }
 
 export enum EventStatus {
@@ -46,13 +47,21 @@ export interface CreateSlotDto {
   booking: boolean;
 }
 
+export enum SlotStatus {
+  AVAILABLE = "AVAILABLE",
+  FULL = "FULL",
+  CANCELLED = "CANCELLED",
+}
+
 export interface Slot {
+  participatorNum: number;
   id: string;
   availableParticipatorNum: number;
   startDate: Date;
   endDate: Date;
   booking: boolean;
   participators?: Array<UserInfo>;
-  creator?: UserInfo;
+  host?: UserInfo;
   event?: Event;
+  status: SlotStatus;
 }
