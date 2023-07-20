@@ -5,6 +5,7 @@ import {
   Container,
   createStyles,
   Divider,
+  Flex,
   Grid,
   Group,
   LoadingOverlay,
@@ -27,6 +28,11 @@ import CreateSlotModal from "../../components/Modal/CreateSlotModal";
 import { useQuery } from "@tanstack/react-query";
 import { getEvent, getSlotsOfEvent } from "../../lib/endpoint";
 import SlotList from "../../components/Slots/SlotList";
+import {
+  IconCalendar,
+  IconChevronDown,
+  IconChevronRight,
+} from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -88,6 +94,8 @@ const EventPage: FC = () => {
   const { classes, cx } = useStyles();
   const eventId = router.query.id as string;
 
+  const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(false);
+
   return (
     <div className={classes.container}>
       <CreateSlotModal
@@ -99,7 +107,34 @@ const EventPage: FC = () => {
 
       <div className={classes.inner}>
         <Paper className={cx(classes.paper, classes.sideBar)}>
-          <Calendar onChange={setSelectedDate} value={selectedDate} size="sm" />
+          <Group spacing="xs" align="center">
+            <IconCalendar />
+            <Button
+              onClick={() => setShowLandscapeCalendar((p) => !p)}
+              size="xs"
+              compact
+              variant="light"
+            >
+              {showLandscapeCalendar ? (
+                <IconChevronRight size={18} />
+              ) : (
+                <IconChevronDown size={18} />
+              )}
+            </Button>
+          </Group>
+          <Box
+            sx={{
+              display: showLandscapeCalendar ? "none" : "block",
+            }}
+          >
+            {" "}
+            <Calendar
+              onChange={setSelectedDate}
+              value={selectedDate}
+              size="sm"
+            />
+          </Box>
+
           <Box
             sx={{
               flex: 1,
