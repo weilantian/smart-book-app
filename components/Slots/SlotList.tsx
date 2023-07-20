@@ -14,6 +14,8 @@ import { IconClock } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useAtom } from "jotai";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { FC } from "react";
 
 import { getSlotsOfEvent } from "../../lib/endpoint";
@@ -31,7 +33,12 @@ const useStyles = createStyles((theme) => ({
     border: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]
     }`,
+    transition: "background 200ms ease",
+    cursor: "pointer",
     background: theme.colorScheme === "dark" ? theme.colors.dark[7] : "#fff",
+    "&:hover": {
+      background: theme.colorScheme === "dark" ? theme.colors.dark[6] : "#fff",
+    },
   },
 }));
 
@@ -39,9 +46,15 @@ const Item: FC<{ slot: Slot }> = ({ slot }) => {
   const { classes } = useStyles();
   const startDate = dayjs(slot.startDate);
   const endDate = dayjs(slot.endDate);
+  const router = useRouter();
   const [bookingDetail] = useAtom(bookingDetailStore);
   return (
-    <Box className={classes.container}>
+    <Box
+      onClick={() => {
+        router.push(`/event/slot/${slot.id}`);
+      }}
+      className={classes.container}
+    >
       <Stack spacing={12}>
         <Group position="apart" spacing={8}>
           <Text
@@ -133,11 +146,27 @@ const Item: FC<{ slot: Slot }> = ({ slot }) => {
           </Badge>
 
           {bookingDetail.userRole == "PARTICIPATOR" && (
-            <Button size="xs">Book</Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              size="xs"
+            >
+              Book
+            </Button>
           )}
 
           {bookingDetail.userRole !== "PARTICIPATOR" &&
-            bookingDetail.isEditing && <Button size="xs">Edit</Button>}
+            bookingDetail.isEditing && (
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                size="xs"
+              >
+                Edit
+              </Button>
+            )}
         </Group>
       </Stack>
     </Box>
