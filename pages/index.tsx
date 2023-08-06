@@ -1,87 +1,66 @@
-import {
-  Button,
-  Container,
-  Group,
-  SimpleGrid,
-  Stack,
-  Switch,
-  Title,
-} from "@mantine/core";
-import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
-import EventCard from "../components/EventCard";
-import Layout from "../components/Layout";
-import useCurrentUser from "../hooks/useCurrentUser";
-import useIsAuthorized from "../hooks/useIsAuthroized";
-import { getUserManagedEvents } from "../lib/endpoint";
-import { NextPageWithLayout } from "./_app";
+import { NextPage } from "next";
 
-const getUserManagedEventsQueryKey = (showEnd: boolean) => {
-  return ["user-managed-events", showEnd ? "show-end" : "hide-end"];
-};
+import { createStyles, Paper, Title } from "@mantine/core";
+import EventPageHeader from "../components/EventPageHeader";
 
-const ManagedEvents = () => {
-  const [showEnd, setShowEnd] = useState(false);
-  const { data } = useQuery(
-    getUserManagedEventsQueryKey(showEnd),
-    ({ queryKey }: QueryFunctionContext) => {
-      const [key, showEnd] = queryKey as ReturnType<
-        typeof getUserManagedEventsQueryKey
-      >;
-      return getUserManagedEvents(showEnd === "show-end");
-    }
-  );
+const useStyles = createStyles((theme) => ({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[7]
+        : theme.colors.gray[0],
+    width: "100%",
+    height: "100vh",
+    boxSizing: "border-box",
+  },
+  inner: {
+    flex: 1,
+    gap: 14,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
+    paddingLeft: theme.spacing.lg,
+    paddingRight: theme.spacing.lg,
+    display: "flex",
+    boxSizing: "border-box",
+
+    alignItems: "stretch",
+  },
+  paper: {
+    boxSizing: "border-box",
+    border: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]
+    }`,
+    padding: theme.spacing.md,
+    borderRadius: theme.radius.md,
+    backgroundColor:
+      theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.white,
+  },
+  sideBar: {
+    gap: 0,
+    display: "flex",
+    flexDirection: "column",
+    width: 310,
+    boxSizing: "border-box",
+  },
+  main: {
+    flex: 1,
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    boxSizing: "border-box",
+  },
+}));
+
+const IndexPage: NextPage = () => {
+  const { classes, cx } = useStyles();
   return (
-    <>
-      <Group position="apart">
-        <Title order={4}>Events manage by you</Title>
-        <Switch
-          checked={showEnd}
-          onChange={(e) => setShowEnd(e.currentTarget.checked)}
-          label="Includes Ended"
-        />
-      </Group>
-
-      <SimpleGrid spacing="lg" cols={3}>
-        {data?.data.map((event) => (
-          <EventCard
-            id={event.id}
-            participators={event.participatorNum}
-            status={event.status}
-            key={event.id}
-            slots={0}
-            name={event.name}
-          />
-        ))}
-      </SimpleGrid>
-    </>
+    <div className={classes.container}>
+      <EventPageHeader eventId={eventId} />
+    </div>
   );
 };
 
-const Web: NextPageWithLayout = () => {
-  const router = useRouter();
-  const { data } = useCurrentUser();
-  const { isAuthorized } = useIsAuthorized();
-  useEffect(() => {
-    if (isAuthorized) return;
-    router.push("/signin");
-  }, [isAuthorized, router]);
-  return (
-    <Container
-      size="md"
-      sx={{
-        marginTop: "20px",
-      }}
-    >
-      <Stack>
-        {data?.data && <Title order={3}>Welcome back, {data?.data.name}</Title>}
-        <ManagedEvents />
-      </Stack>
-    </Container>
-  );
-};
-
-Web.getLayout = (page) => <Layout>{page}</Layout>;
-
-export default Web;
+export default IndexPage;

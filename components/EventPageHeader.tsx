@@ -14,12 +14,9 @@ import {
   IconEdit,
   IconShare,
 } from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
-import { useAtom } from "jotai";
+
 import Link from "next/link";
 import { FC } from "react";
-import { getEvent } from "../lib/endpoint";
-import bookingDetailStore from "../store/bookingDetailStore";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -74,18 +71,6 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
-  const [bookingDetail, setBookingDetail] = useAtom(bookingDetailStore);
-  const { data } = useQuery({
-    queryFn: () => getEvent(eventId),
-    queryKey: ["event", eventId],
-    onSuccess: (data) => {
-      setBookingDetail({
-        ...bookingDetail,
-        userRole: data.data.role ?? "PARTICIPATOR",
-        id: data.data.id,
-      });
-    },
-  });
   const { classes } = useStyles();
 
   return (
@@ -97,27 +82,13 @@ const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
           </Box>
         </Link>
 
-        <Text weight="bold">{data?.data?.name}</Text>
-        {!bookingDetail.isEditing && <Badge color="gray">Read Only</Badge>}
+        <Text weight="bold">{}</Text>
 
         <UnstyledButton className={classes.functionalButton}>
           <IconDots />
         </UnstyledButton>
       </Group>
       <Group spacing="sm">
-        {!bookingDetail.isEditing &&
-          bookingDetail.userRole !== "PARTICIPATOR" && (
-            <Button
-              onClick={() =>
-                setBookingDetail({ ...bookingDetail, isEditing: true })
-              }
-              leftIcon={<IconEdit size={18} />}
-              size="sm"
-            >
-              Edit
-            </Button>
-          )}
-
         <Button leftIcon={<IconShare size={18} />} size="sm">
           Share
         </Button>
