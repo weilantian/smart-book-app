@@ -5,8 +5,6 @@ import {
   Text,
   Button,
   UnstyledButton,
-  Switch,
-  Badge,
 } from "@mantine/core";
 import {
   IconCalendarEvent,
@@ -70,7 +68,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
+const EventPageHeader: FC = () => {
   const { classes } = useStyles();
 
   return (
@@ -82,7 +80,7 @@ const EventPageHeader: FC<{ eventId: string }> = ({ eventId }) => {
           </Box>
         </Link>
 
-        <Text weight="bold">{}</Text>
+        <Text weight="bold">Smart Booking</Text>
 
         <UnstyledButton className={classes.functionalButton}>
           <IconDots />

@@ -58,7 +58,7 @@ const IndexPage: NextPage = () => {
   const { classes, cx } = useStyles();
   return (
     <div className={classes.container}>
-      <EventPageHeader eventId={eventId} />
+      <EventPageHeader />
     </div>
   );
 };
