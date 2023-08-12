@@ -68,7 +68,10 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const EventPageHeader: FC = () => {
+const EventPageHeader: FC<{
+  title?: string;
+  home?: boolean;
+}> = ({ home, title }) => {
   const { classes } = useStyles();
 
   return (
@@ -80,7 +83,9 @@ const EventPageHeader: FC = () => {
           </Box>
         </Link>
 
-        <Text weight="bold">Smart Booking</Text>
+        {home && <Text weight="bold">Smart Booking</Text>}
+
+        {!home && title && <Text weight="bold">{title}</Text>}
 
         <UnstyledButton className={classes.functionalButton}>
           <IconDots />

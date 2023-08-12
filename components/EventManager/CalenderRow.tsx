@@ -1,5 +1,12 @@
 import { Box, createStyles, Grid, Text } from "@mantine/core";
-import { FC } from "react";
+import { FC, use, useContext, useEffect } from "react";
+import EventItem from "./EventItem";
+import { TimeSlot } from "../../lib/models";
+import { useAtom } from "jotai";
+
+import useTraceUpdate from "../../hooks/useTraceUpdate";
+import { BookableMachineContext } from "../../contexts/BookableMachineContext";
+import { useActor } from "@xstate/react";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -40,18 +47,48 @@ const Cell = () => {
 };
 
 const CalendarRow: FC<{
-  day: number;
-  name: string;
-}> = ({ day, name }) => {
-  const { classes, cx } = useStyles();
+  date: Date;
+  slots: Array<TimeSlot>;
+}> = ({ date, slots }) => {
+  const bookableService = useContext(BookableMachineContext);
+  const [state] = useActor(bookableService!);
+  const computeRelativePos = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    return e.clientY - rect.top;
+  };
+
   return (
     <Grid.Col
+      onMouseDown={(e) => {
+        console.log(computeRelativePos(e));
+        bookableService!.send({
+          type: "CREATE",
+          date: date,
+          pos: computeRelativePos(e),
+        });
+      }}
+      onMouseMove={(e) => {
+        bookableService!.send({
+          type: "MOUSE_MOVED",
+          pos: computeRelativePos(e),
+        });
+      }}
+      onMouseUp={() =>
+        bookableService!.send({
+          type: "MOUSE_UP",
+        })
+      }
       sx={{
         padding: 0,
+        position: "relative",
       }}
       span={1}
     >
-      <Box onMouseDown={() => {}}>
+      {slots.map((slot) => (
+        <EventItem slot={slot} key={slot.id} />
+      ))}
+
+      <Box>
         {Array(23)
           .fill(0)
           .map((_, i) => (

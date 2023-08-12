@@ -28,6 +28,22 @@ export enum Role {
   PARTICIPATOR = "PARTICIPATOR",
 }
 
+export interface TimeSlot {
+  id?: string;
+  name?: string;
+  description?: string;
+  location?: string;
+
+  startDate: Date;
+  endDate: Date;
+
+  attendeeFirstName?: string;
+  attendeeLastName?: string;
+  attendeeEmail?: string;
+  attendeeBookingReferenceCode?: string;
+  attendeeBookingManagementToken?: string;
+}
+
 export interface Event {
   role?: Role;
   id: string;

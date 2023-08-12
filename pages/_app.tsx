@@ -12,6 +12,9 @@ import { LocaleProvider } from "@douyinfe/semi-ui";
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
+import { inspect } from "@xstate/inspect";
+import { Provider } from "jotai";
+import { BookableMachineContextProvider } from "../contexts/BookableMachineContext";
 
 dayjs.extend(LocalizedFormat);
 
@@ -30,6 +33,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     const body = document.body;
     body.setAttribute("theme-mode", "dark");
   }, []);
+
   return (
     <>
       <Head>
@@ -39,22 +43,24 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider
-          theme={{
-            colorScheme: "dark",
-          }}
-          withGlobalStyles
-          withNormalizeCSS
-        >
-          <ModalsProvider>
-            <LocaleProvider locale={en_US}>
-              <RouterTransition />
-              {getLayout(<Component {...pageProps} />)}
-            </LocaleProvider>
-          </ModalsProvider>
-        </MantineProvider>
-      </QueryClientProvider>
+      <BookableMachineContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider
+            theme={{
+              colorScheme: "dark",
+            }}
+            withGlobalStyles
+            withNormalizeCSS
+          >
+            <ModalsProvider>
+              <LocaleProvider locale={en_US}>
+                <RouterTransition />
+                {getLayout(<Component {...pageProps} />)}
+              </LocaleProvider>
+            </ModalsProvider>
+          </MantineProvider>
+        </QueryClientProvider>
+      </BookableMachineContextProvider>
     </>
   );
 }

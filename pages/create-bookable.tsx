@@ -24,8 +24,9 @@ import { TimeSlot } from "../lib/models";
 import { useAtom } from "jotai";
 import eventManagerStore from "../store/eventManagerStore";
 
-import { useActor } from "@xstate/react";
+import useTraceUpdate from "../hooks/useTraceUpdate";
 import { BookableMachineContext } from "../contexts/BookableMachineContext";
+import { useActor } from "@xstate/react";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -89,22 +90,29 @@ const IndexPage: NextPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(false);
 
-  const [editingState, setEditingState] = useState<
-    "viewing" | "creating" | "editing"
-  >("creating");
-
   const bookableService = useContext(BookableMachineContext);
   const [state] = useActor(bookableService!);
 
+  const [eventManagerState] = useAtom(eventManagerStore);
+
+  const slotsForRender = useMemo<Array<TimeSlot>>(() => {
+    if (state.matches("creatingBookable.idle")) return state.context.slots;
+    let computed = state.context.slots.concat(state.context.newSlot);
+
+    return computed;
+  }, [state]);
+
   useEffect(() => {
+    if (!eventManagerState.rowHeight) return;
     bookableService!.send({
-      type: "SET_SELECTED_DATE",
+      type: "CREATE_BOOKABLE",
+      gridHeight: eventManagerState.rowHeight,
     });
-  }, [bookableService]);
+  }, [eventManagerState, bookableService]);
 
   return (
     <div className={classes.container}>
-      <EventPageHeader />
+      <EventPageHeader title="Create a new Booking" />
       <div className={classes.inner}>
         <Paper className={cx(classes.paper, classes.sideBar)}>
           <Group spacing="xs" align="center">
@@ -148,14 +156,7 @@ const IndexPage: NextPage = () => {
               }}
               position="apart"
             >
-              <Title order={4}>Slots</Title>
-              <Button
-                onClick={() => router.push("/create-bookable")}
-                size="xs"
-                variant="light"
-              >
-                Add
-              </Button>
+              <Title order={4}>Booking Detail</Title>
             </Group>
             <Box
               sx={{
@@ -168,7 +169,11 @@ const IndexPage: NextPage = () => {
           </Box>
         </Paper>
         <Paper className={cx(classes.paper, classes.main)}>
-          <EventManager setDate={setSelectedDate} selectedDate={selectedDate} />
+          <EventManager
+            slots={slotsForRender}
+            setDate={setSelectedDate}
+            selectedDate={selectedDate}
+          />
         </Paper>
       </div>
     </div>

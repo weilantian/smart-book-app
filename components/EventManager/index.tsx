@@ -10,8 +10,13 @@ import {
 } from "@mantine/core";
 import CalenderRow from "./CalenderRow";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, use, useCallback, useEffect, useRef, useState } from "react";
 import DayIndicator from "./DayIndicator";
+import { useResizeObserver } from "@mantine/hooks";
+import { useAtom } from "jotai";
+import eventManagerStore from "../../store/eventManagerStore";
+import { TimeSlot } from "../../lib/models";
+import useTraceUpdate from "../../hooks/useTraceUpdate";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -37,9 +42,10 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const EventManager: FC<{
+  slots: Array<TimeSlot>;
   selectedDate: Date | null;
   setDate: (date: Date | null) => void;
-}> = ({ selectedDate, setDate }) => {
+}> = ({ selectedDate, setDate, slots }) => {
   const { classes, cx } = useStyles();
 
   //Get each day of the week of the selected date
@@ -48,6 +54,24 @@ const EventManager: FC<{
     date.setDate(date.getDate() - date.getDay() + i);
     return date;
   });
+
+  const [, setEventManagerStore] = useAtom(eventManagerStore);
+  const [gridRef, rect] = useResizeObserver();
+
+  useEffect(() => {
+    setEventManagerStore((prev) => ({
+      ...prev,
+      rowHeight: rect.height,
+    }));
+  }, [rect, setEventManagerStore]);
+
+  const getFilteredSloByDate = useCallback(
+    (displayDate: Date) =>
+      slots.filter(
+        (slot) => slot.startDate.getDate() === displayDate.getDate()
+      ),
+    [slots]
+  );
 
   return (
     <Box className={classes.container}>
@@ -163,14 +187,15 @@ const EventManager: FC<{
                 paddingTop: 20,
               }}
             >
-              <Grid columns={7}>
-                <CalenderRow day={1} name="Monday" />
-                <CalenderRow day={1} name="Monday" />
-                <CalenderRow day={1} name="Monday" />
-                <CalenderRow day={1} name="Monday" />
-                <CalenderRow day={1} name="Monday" />
-                <CalenderRow day={1} name="Monday" />
-                <CalenderRow day={1} name="Monday" />
+              <Grid ref={gridRef} columns={7}>
+                {currentWeek.map((date) => (
+                  <CalenderRow
+                    key={date.toString()}
+                    slots={getFilteredSloByDate(date)}
+                    date={date}
+                  />
+                ))}
+                )
               </Grid>
               <div
                 style={{
