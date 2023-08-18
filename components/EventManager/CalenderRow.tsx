@@ -1,12 +1,14 @@
 import { Box, createStyles, Grid, Text } from "@mantine/core";
-import { FC, use, useContext, useEffect } from "react";
+import { FC, use, useContext, useEffect, useState } from "react";
 import EventItem from "./EventItem";
 import { TimeSlot } from "../../lib/models";
 import { useAtom } from "jotai";
+import { v4 } from "uuid";
 
 import useTraceUpdate from "../../hooks/useTraceUpdate";
-import { BookableMachineContext } from "../../contexts/BookableMachineContext";
-import { useActor } from "@xstate/react";
+
+import bookableMachineAtom from "../../store/bookableMachineStore";
+import { COL_HEIGHT } from "../../config";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -20,25 +22,10 @@ const Cell = () => {
   return (
     <Box
       sx={(theme) => ({
-        height: 60,
-        borderLeft: `1px solid ${
+        height: COL_HEIGHT,
+        border: `1px solid ${
           theme.colorScheme === "dark"
             ? theme.colors.dark[4]
-            : theme.colors.gray[2]
-        }`,
-        borderRight: `1px solid ${
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[4]
-            : theme.colors.gray[2]
-        }`,
-        borderBottom: `1px solid ${
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1]
-        }`,
-        borderTop: `1px solid ${
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[5]
             : theme.colors.gray[1]
         }`,
       })}
@@ -50,8 +37,8 @@ const CalendarRow: FC<{
   date: Date;
   slots: Array<TimeSlot>;
 }> = ({ date, slots }) => {
-  const bookableService = useContext(BookableMachineContext);
-  const [state] = useActor(bookableService!);
+  const [, send] = useAtom(bookableMachineAtom);
+
   const computeRelativePos = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     return e.clientY - rect.top;
@@ -60,21 +47,20 @@ const CalendarRow: FC<{
   return (
     <Grid.Col
       onMouseDown={(e) => {
-        console.log(computeRelativePos(e));
-        bookableService!.send({
+        send({
           type: "CREATE",
           date: date,
           pos: computeRelativePos(e),
         });
       }}
       onMouseMove={(e) => {
-        bookableService!.send({
+        send({
           type: "MOUSE_MOVED",
           pos: computeRelativePos(e),
         });
       }}
       onMouseUp={() =>
-        bookableService!.send({
+        send({
           type: "MOUSE_UP",
         })
       }
@@ -84,9 +70,9 @@ const CalendarRow: FC<{
       }}
       span={1}
     >
-      {slots.map((slot) => (
-        <EventItem slot={slot} key={slot.id} />
-      ))}
+      {slots.map((slot) => {
+        return <EventItem slot={{ ...slot }} key={slot.id} />;
+      })}
 
       <Box>
         {Array(23)

@@ -1,6 +1,7 @@
 import { createMachine } from "xstate";
 import { v4 as uuidV4 } from "uuid";
 import { TimeSlot } from "../lib/models";
+import { COL_HEIGHT } from "../config";
 const bookableMachine = createMachine({
   id: "bookableMachine",
 
@@ -60,7 +61,6 @@ const bookableMachine = createMachine({
             CREATE: {
               target: "creating",
               actions: (context, event) => {
-                console.log("M START");
                 context.dragging.draggingDate = event.date;
                 const date = computeDateByPosition(
                   context.dragging.draggingDate,
@@ -71,7 +71,7 @@ const bookableMachine = createMachine({
                 context.newSlot.startDate = date;
                 //Set end date to 30 minutes later
                 const endDate = new Date(date);
-                endDate.setMinutes(endDate.getMinutes() + 30);
+                endDate.setMinutes(context.newSlot.startDate.getMinutes() + 30);
                 context.newSlot.endDate = endDate;
               },
             },
@@ -82,7 +82,6 @@ const bookableMachine = createMachine({
             MOUSE_MOVED: {
               target: "creating",
               actions: (context, event) => {
-                console.log("M MOVE");
                 const date = computeDateByPosition(
                   context.dragging.draggingDate,
                   context.gridHeight,
@@ -122,7 +121,7 @@ const computeDateByPosition = (
   gridHeight: number,
   pos: number
 ) => {
-  const bookableHours = (pos / gridHeight) * 24;
+  const bookableHours = (pos / (24 * COL_HEIGHT)) * 24;
 
   // computer hours and minutes
   const hours = Math.floor(bookableHours);

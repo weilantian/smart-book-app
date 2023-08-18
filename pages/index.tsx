@@ -24,9 +24,6 @@ import { TimeSlot } from "../lib/models";
 import { useAtom } from "jotai";
 import eventManagerStore from "../store/eventManagerStore";
 
-import { useActor } from "@xstate/react";
-import { BookableMachineContext } from "../contexts/BookableMachineContext";
-
 const useStyles = createStyles((theme) => ({
   container: {
     display: "flex",
@@ -92,15 +89,6 @@ const IndexPage: NextPage = () => {
   const [editingState, setEditingState] = useState<
     "viewing" | "creating" | "editing"
   >("creating");
-
-  const bookableService = useContext(BookableMachineContext);
-  const [state] = useActor(bookableService!);
-
-  useEffect(() => {
-    bookableService!.send({
-      type: "SET_SELECTED_DATE",
-    });
-  }, [bookableService]);
 
   return (
     <div className={classes.container}>

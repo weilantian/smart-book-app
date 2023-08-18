@@ -29,13 +29,21 @@ export enum Role {
 }
 
 export interface TimeSlot {
-  id?: string;
+  id: string;
   name?: string;
-  description?: string;
   location?: string;
 
   startDate: Date;
   endDate: Date;
+}
+
+export interface Bookable {
+  id: string;
+  name: string;
+  description: string;
+
+  timeSlots: Array<TimeSlot>;
+  type: "ONE_TIME" | "RECURRING";
 
   attendeeFirstName?: string;
   attendeeLastName?: string;

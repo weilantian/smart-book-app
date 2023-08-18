@@ -1,8 +1,10 @@
-import { createStyles } from "@mantine/core";
+import { Box, createStyles } from "@mantine/core";
 import { useAtom } from "jotai";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 import eventManagerStore from "../../store/eventManagerStore";
 import { TimeSlot } from "../../lib/models";
+import { COL_HEIGHT } from "../../config";
+import SlotEditPopup from "../Slots/SlotEditPopup";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -11,10 +13,14 @@ const useStyles = createStyles((theme) => ({
     width: "100%",
     borderRadius: theme.radius.md,
     top: 0,
+    border:
+      theme.colorScheme === "dark"
+        ? `1px solid ${theme.colors.gray[7]}`
+        : `1px solid ${theme.colors.gray[0]}`,
     backgroundColor:
       theme.colorScheme === "dark"
-        ? theme.colors.blue[8]
-        : theme.colors.blue[0],
+        ? theme.colors.dark[5]
+        : theme.colors.gray[1],
   },
 }));
 
@@ -28,25 +34,30 @@ const EventItem: FC<{
     const hour = slot.startDate.getHours();
     const minutes = slot.startDate.getMinutes();
 
-    return (evManager.rowHeight / 24) * (hour + minutes / 60);
-  }, [evManager.rowHeight, slot]);
+    return COL_HEIGHT * (hour + minutes / 60);
+  }, [slot]);
 
   const height = useMemo(() => {
     const duration = slot.endDate.getTime() - slot.startDate.getTime();
     const minutes = duration / 1000 / 60;
-    return (evManager.rowHeight / 24) * (minutes / 60);
-  }, [evManager.rowHeight, slot]);
+    return COL_HEIGHT * (minutes / 60);
+  }, [slot]);
 
   return (
-    <div
-      style={{
-        top,
-        height,
-      }}
-      className={cx(classes.container)}
-    >
-      <div>Event</div>
-    </div>
+    <SlotEditPopup slotId={slot.id}>
+      <Box
+        onClick={() => (evManager.slotEditing = slot.id)}
+        onMouseDown={(e) => e.stopPropagation()}
+        style={{
+          top,
+          height,
+          userSelect: "none",
+        }}
+        className={cx(classes.container)}
+      >
+        <div>Event</div>
+      </Box>
+    </SlotEditPopup>
   );
 };
 

@@ -3,10 +3,13 @@ import { NextPage } from "next";
 import {
   Box,
   Button,
+  Collapse,
   createStyles,
   Divider,
   Group,
   Paper,
+  Stack,
+  TextInput,
   Title,
 } from "@mantine/core";
 import EventPageHeader from "../components/EventPageHeader";
@@ -17,6 +20,8 @@ import {
   IconCalendar,
   IconChevronDown,
   IconChevronRight,
+  IconHeading,
+  IconLocation,
 } from "@tabler/icons-react";
 import { Calendar } from "@mantine/dates";
 import EventManager from "../components/EventManager";
@@ -25,8 +30,12 @@ import { useAtom } from "jotai";
 import eventManagerStore from "../store/eventManagerStore";
 
 import useTraceUpdate from "../hooks/useTraceUpdate";
-import { BookableMachineContext } from "../contexts/BookableMachineContext";
+
 import { useActor } from "@xstate/react";
+import bookableMachine from "../state/bookableMachine";
+import bookableMachineAtom from "../store/bookableMachineStore";
+import BookableInfoForm from "../components/BookableInfoForm";
+import SlotList from "../components/Slots/SlotList";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -90,25 +99,16 @@ const IndexPage: NextPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(false);
 
-  const bookableService = useContext(BookableMachineContext);
-  const [state] = useActor(bookableService!);
-
-  const [eventManagerState] = useAtom(eventManagerStore);
+  const [state, send] = useAtom(bookableMachineAtom);
 
   const slotsForRender = useMemo<Array<TimeSlot>>(() => {
-    if (state.matches("creatingBookable.idle")) return state.context.slots;
-    let computed = state.context.slots.concat(state.context.newSlot);
+    if (!state.matches("creatingBookable.idle"))
+      return [...state.context.slots, state.context.newSlot];
 
-    return computed;
+    return [...state.context.slots];
   }, [state]);
 
-  useEffect(() => {
-    if (!eventManagerState.rowHeight) return;
-    bookableService!.send({
-      type: "CREATE_BOOKABLE",
-      gridHeight: eventManagerState.rowHeight,
-    });
-  }, [eventManagerState, bookableService]);
+  useEffect(() => send("CREATE_BOOKABLE"), [send]);
 
   return (
     <div className={classes.container}>
@@ -124,23 +124,21 @@ const IndexPage: NextPage = () => {
               variant="light"
             >
               {showLandscapeCalendar ? (
-                <IconChevronRight size={18} />
-              ) : (
                 <IconChevronDown size={18} />
+              ) : (
+                <IconChevronRight size={18} />
               )}
             </Button>
           </Group>
-          <Box
-            sx={{
-              display: showLandscapeCalendar ? "none" : "block",
-            }}
-          >
-            <Calendar
-              onChange={setSelectedDate}
-              value={selectedDate}
-              size="sm"
-            />
-          </Box>
+          <Collapse in={showLandscapeCalendar}>
+            <Box>
+              <Calendar
+                onChange={setSelectedDate}
+                value={selectedDate}
+                size="sm"
+              />
+            </Box>
+          </Collapse>
 
           <Box
             sx={{
@@ -156,7 +154,7 @@ const IndexPage: NextPage = () => {
               }}
               position="apart"
             >
-              <Title order={4}>Booking Detail</Title>
+              <Title order={4}>New Booking</Title>
             </Group>
             <Box
               sx={{
@@ -164,8 +162,21 @@ const IndexPage: NextPage = () => {
 
                 overflowY: "scroll",
                 minHeight: 0,
+                paddingRight: 8,
               }}
-            ></Box>
+            >
+              <Title
+                style={{
+                  marginBottom: 4,
+                }}
+                order={6}
+              >
+                When I will be available
+              </Title>
+              <SlotList slots={slotsForRender} />
+              <Divider my="sm" />
+              <BookableInfoForm onSubmit={() => {}} />
+            </Box>
           </Box>
         </Paper>
         <Paper className={cx(classes.paper, classes.main)}>

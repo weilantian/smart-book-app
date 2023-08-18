@@ -1,190 +1,123 @@
-import { Tag } from "@douyinfe/semi-ui";
-import {
-  Stack,
-  LoadingOverlay,
-  Box,
-  Text,
-  Group,
-  Button,
-  createStyles,
-  Avatar,
-  Badge,
-} from "@mantine/core";
-import { IconClock } from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
-import { useAtom } from "jotai";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { FC } from "react";
-
-import { getSlotsOfEvent } from "../../lib/endpoint";
-import { Slot, SlotStatus } from "../../lib/models";
-import { computeSlotStatusName } from "../../lib/utils";
-import bookingDetailStore from "../../store/bookingDetailStore";
+import { Box, Group, createStyles, Text, Flex } from "@mantine/core";
+import { FC, PropsWithChildren, ReactElement } from "react";
+import { TimeSlot } from "../../lib/models";
+import { IconCalculator, IconCalendar, IconClock } from "@tabler/icons-react";
+import { format } from "date-fns";
 
 const useStyles = createStyles((theme) => ({
-  container: {
+  cardWrapper: {
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.blue[3]
+        : theme.colors.blue[0],
+
+    paddingTop: theme.spacing.xs,
+    paddingBottom: theme.spacing.xs,
+    paddingLeft: theme.spacing.sm,
+    paddingRight: theme.spacing.sm,
+
     borderRadius: theme.radius.sm,
-    paddingLeft: theme.spacing.md,
-    paddingRight: theme.spacing.md,
-    paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-    border: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]
-    }`,
-    transition: "background 200ms ease",
-    cursor: "pointer",
-    background: theme.colorScheme === "dark" ? theme.colors.dark[7] : "#fff",
-    "&:hover": {
-      background: theme.colorScheme === "dark" ? theme.colors.dark[6] : "#fff",
-    },
+  },
+  container: {
+    display: "flex",
+    width: "fit-content",
+    alignItems: "center",
+  },
+  colouredText: {
+    color: theme.colors.blue[9],
   },
 }));
 
-const Item: FC<{ slot: Slot }> = ({ slot }) => {
+const SlotListItem: FC<
+  PropsWithChildren<{ icon: ReactElement; title: string }>
+> = ({ icon, title, children }) => {
   const { classes } = useStyles();
-  const startDate = dayjs(slot.startDate);
-  const endDate = dayjs(slot.endDate);
-  const router = useRouter();
-  const [bookingDetail] = useAtom(bookingDetailStore);
   return (
-    <Box
-      onClick={() => {
-        router.push(`/event/slot/${slot.id}`);
-      }}
-      className={classes.container}
-    >
-      <Stack spacing={12}>
-        <Group position="apart" spacing={8}>
-          <Text
-            sx={(theme) => ({
-              fontSize: 14,
-              color:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[3]
-                  : theme.colors.gray[6],
-            })}
-          >
-            Start
-          </Text>
-          <Text weight="600" size="sm">
-            {dayjs(slot.startDate).format("L LT")}
-          </Text>
-        </Group>
-        <Group position="apart" spacing={8}>
-          <Text
-            sx={(theme) => ({
-              fontSize: 14,
-              color:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[3]
-                  : theme.colors.gray[6],
-            })}
-          >
-            End
-          </Text>
-          <Text weight="600" size="sm">
-            {dayjs(slot.endDate).format("L LT")}
-          </Text>
-        </Group>
-        <Group position="apart" spacing={8}>
-          <Text
-            sx={(theme) => ({
-              fontSize: 14,
-              color:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[3]
-                  : theme.colors.gray[6],
-            })}
-          >
-            Duration
-          </Text>
-          <Text weight="600" size="sm">
-            {endDate.diff(startDate, "minutes")} minutes
-          </Text>
-        </Group>
-        <Group position="apart" spacing={8}>
-          <Text
-            sx={(theme) => ({
-              fontSize: 14,
-              color:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[3]
-                  : theme.colors.gray[6],
-            })}
-          >
-            Host By
-          </Text>
-          <Group spacing={4}>
-            <Avatar src={slot.host?.profileImgUrl} size="sm" />
-            <Text size="sm">{slot.host?.name}</Text>
-          </Group>
-        </Group>
-        <Group position="apart" spacing={8}>
-          <Text
-            sx={(theme) => ({
-              fontSize: 14,
-              color:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[3]
-                  : theme.colors.gray[6],
-            })}
-          >
-            Capacity
-          </Text>
-          <Group spacing={4}>
-            <Text size="sm">
-              Booked {slot.participatorNum} / Max{" "}
-              {slot.availableParticipatorNum}
-            </Text>
-          </Group>
-        </Group>
-        <Group mt={12} position="apart">
-          <Badge color={slot.status == SlotStatus.AVAILABLE ? "green" : "red"}>
-            {computeSlotStatusName(slot.status)}
-          </Badge>
-
-          {bookingDetail.userRole == "PARTICIPATOR" && (
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              size="xs"
-            >
-              Book
-            </Button>
-          )}
-
-          {bookingDetail.userRole !== "PARTICIPATOR" &&
-            bookingDetail.isEditing && (
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                size="xs"
-              >
-                Edit
-              </Button>
-            )}
-        </Group>
-      </Stack>
+    <Box className={classes.container}>
+      <Box
+        sx={{
+          marginRight: "4px",
+        }}
+        className={classes.container}
+      >
+        {icon}
+        <Text
+          sx={(theme) => ({
+            marginLeft: "2px",
+            color: theme.colors.blue[8],
+          })}
+          fw={600}
+          fz="sm"
+        >
+          {title}
+        </Text>
+      </Box>
+      <Text
+        className={classes.colouredText}
+        fz="sm"
+        sx={{
+          whiteSpace: "nowrap",
+        }}
+        inline
+      >
+        {children}
+      </Text>
     </Box>
   );
 };
 
-const SlotList: FC<{ eventId: string }> = ({ eventId }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["slots", { eventId }],
-    queryFn: () => getSlotsOfEvent(eventId),
-  });
+const SlotListCard: FC<{ slot: TimeSlot }> = ({ slot }) => {
+  const { classes } = useStyles();
+
   return (
-    <Stack pos="relative" style={{ height: 200 }}>
-      <LoadingOverlay visible={isLoading} overlayBlur={2} />
-      {data?.data.map((slot) => (
-        <Item key={slot.id} slot={slot} />
-      ))}
-    </Stack>
+    <Box
+      className={classes.cardWrapper}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <SlotListItem
+        icon={<IconCalendar className={classes.colouredText} size={18} />}
+        title="Date"
+      >
+        {format(slot.startDate, "yyyy-mm-dd")}
+      </SlotListItem>
+      <SlotListItem
+        icon={<IconClock className={classes.colouredText} size={18} />}
+        title="Start"
+      >
+        {format(slot.startDate, "hh:mm a")}
+      </SlotListItem>
+      <SlotListItem
+        icon={<IconClock className={classes.colouredText} size={18} />}
+        title="End"
+      >
+        {format(slot.endDate, "hh:mm a")}
+      </SlotListItem>
+    </Box>
+  );
+};
+
+const SlotList: FC<{ slots: Array<TimeSlot> }> = ({ slots }) => {
+  return (
+    <Box
+      sx={{
+        overflowX: "scroll",
+        minWidth: 0,
+      }}
+    >
+      <Box
+        sx={{
+          display: "inline-flex",
+          gap: 8,
+        }}
+      >
+        {slots.map((slot) => (
+          <SlotListCard key={slot.id} slot={{ ...slot }} />
+        ))}
+      </Box>
+    </Box>
   );
 };
 

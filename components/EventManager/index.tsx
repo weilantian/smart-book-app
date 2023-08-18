@@ -10,13 +10,48 @@ import {
 } from "@mantine/core";
 import CalenderRow from "./CalenderRow";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { FC, use, useCallback, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import DayIndicator from "./DayIndicator";
 import { useResizeObserver } from "@mantine/hooks";
 import { useAtom } from "jotai";
 import eventManagerStore from "../../store/eventManagerStore";
 import { TimeSlot } from "../../lib/models";
 import useTraceUpdate from "../../hooks/useTraceUpdate";
+import CurrentTimeMarker from "../CurrentTimeMarker";
+import { COL_HEIGHT } from "../../config";
+
+const DayLabel: FC<{ i: number }> = ({ i }) => {
+  const text = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (i == 9) text.current?.scrollIntoView({});
+  }, [i]);
+  return (
+    <Text
+      ref={text}
+      key={i}
+      sx={(theme) => ({
+        lineHeight: 0,
+        userSelect: "none",
+        color:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[3]
+            : theme.colors.gray[5],
+      })}
+      align="end"
+    >
+      {i}:00
+    </Text>
+  );
+};
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -49,11 +84,15 @@ const EventManager: FC<{
   const { classes, cx } = useStyles();
 
   //Get each day of the week of the selected date
-  const currentWeek = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(selectedDate ?? new Date());
-    date.setDate(date.getDate() - date.getDay() + i);
-    return date;
-  });
+  const currentWeek = useMemo(
+    () =>
+      Array.from({ length: 7 }, (_, i) => {
+        const date = new Date(selectedDate ?? new Date());
+        date.setDate(date.getDate() - date.getDay() + i);
+        return date;
+      }),
+    [selectedDate]
+  );
 
   const [, setEventManagerStore] = useAtom(eventManagerStore);
   const [gridRef, rect] = useResizeObserver();
@@ -70,6 +109,7 @@ const EventManager: FC<{
       slots.filter(
         (slot) => slot.startDate.getDate() === displayDate.getDate()
       ),
+
     [slots]
   );
 
@@ -157,7 +197,7 @@ const EventManager: FC<{
         >
           <Box className={classes.scrollInner}>
             <Stack
-              spacing={60}
+              spacing={COL_HEIGHT}
               sx={{
                 paddingRight: 14,
                 paddingTop: 14,
@@ -166,43 +206,26 @@ const EventManager: FC<{
               {Array(24)
                 .fill(0)
                 .map((_, i) => (
-                  <Text
-                    key={i}
-                    sx={(theme) => ({
-                      lineHeight: 0,
-                      color:
-                        theme.colorScheme === "dark"
-                          ? theme.colors.dark[3]
-                          : theme.colors.gray[5],
-                    })}
-                    align="end"
-                  >
-                    {i}:00
-                  </Text>
+                  <DayLabel key={i} i={i} />
                 ))}
             </Stack>
             <Box
               sx={{
                 flex: 1,
                 paddingTop: 20,
+                position: "relative",
               }}
             >
+              <CurrentTimeMarker />
               <Grid ref={gridRef} columns={7}>
                 {currentWeek.map((date) => (
                   <CalenderRow
-                    key={date.toString()}
+                    key={date.toISOString()}
                     slots={getFilteredSloByDate(date)}
                     date={date}
                   />
                 ))}
-                )
               </Grid>
-              <div
-                style={{
-                  width: "100%",
-                  height: 40,
-                }}
-              ></div>
             </Box>
           </Box>
         </Box>
