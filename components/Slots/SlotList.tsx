@@ -3,6 +3,9 @@ import { FC, PropsWithChildren, ReactElement } from "react";
 import { TimeSlot } from "../../lib/models";
 import { IconCalculator, IconCalendar, IconClock } from "@tabler/icons-react";
 import { format } from "date-fns";
+import SlotEditPopup from "./SlotEditPopup";
+import { useAtom } from "jotai";
+import eventManagerStore from "../../store/eventManagerStore";
 
 const useStyles = createStyles((theme) => ({
   cardWrapper: {
@@ -32,6 +35,7 @@ const SlotListItem: FC<
   PropsWithChildren<{ icon: ReactElement; title: string }>
 > = ({ icon, title, children }) => {
   const { classes } = useStyles();
+
   return (
     <Box className={classes.container}>
       <Box
@@ -68,9 +72,10 @@ const SlotListItem: FC<
 
 const SlotListCard: FC<{ slot: TimeSlot }> = ({ slot }) => {
   const { classes } = useStyles();
-
+  const [evManager, setEvManager] = useAtom(eventManagerStore);
   return (
     <Box
+      onClick={() => setEvManager({ ...evManager, slotEditing: slot.id })}
       className={classes.cardWrapper}
       sx={{
         display: "flex",

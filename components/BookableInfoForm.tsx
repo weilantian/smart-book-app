@@ -14,7 +14,7 @@ import { useForm } from "@mantine/form";
 
 const BookableInfoForm: FC<{
   onSubmit: (data: { title: string; location: string }) => void;
-}> = () => {
+}> = ({ onSubmit }) => {
   const form = useForm({
     initialValues: {
       title: "",
@@ -24,7 +24,7 @@ const BookableInfoForm: FC<{
     },
   });
   return (
-    <form>
+    <form onSubmit={form.onSubmit(onSubmit)}>
       <Stack spacing={8}>
         <TextInput
           icon={<IconHeading />}

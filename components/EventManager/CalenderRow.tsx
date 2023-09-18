@@ -9,6 +9,7 @@ import useTraceUpdate from "../../hooks/useTraceUpdate";
 
 import bookableMachineAtom from "../../store/bookableMachineStore";
 import { COL_HEIGHT } from "../../config";
+import eventManagerStore from "../../store/eventManagerStore";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -38,6 +39,7 @@ const CalendarRow: FC<{
   slots: Array<TimeSlot>;
 }> = ({ date, slots }) => {
   const [, send] = useAtom(bookableMachineAtom);
+  const [eventManager, setEventManager] = useAtom(eventManagerStore);
 
   const computeRelativePos = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -47,6 +49,11 @@ const CalendarRow: FC<{
   return (
     <Grid.Col
       onMouseDown={(e) => {
+        if (eventManager.slotEditing !== null) {
+          setEventManager({ ...eventManager, slotEditing: null });
+          return;
+        }
+
         send({
           type: "CREATE",
           date: date,
