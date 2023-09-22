@@ -156,7 +156,7 @@ const IndexPage: NextPage = () => {
           </Box>
         </Paper>
         <Paper className={cx(classes.paper, classes.main)}>
-          <EventManager setDate={setSelectedDate} selectedDate={selectedDate} />
+          {/* <EventManager setDate={setSelectedDate} selectedDate={selectedDate} /> */}
         </Paper>
       </div>
     </div>

@@ -32,7 +32,7 @@ export interface TimeSlot {
   id: string;
   name?: string;
   location?: string;
-
+  description?: string;
   startDate: Date;
   endDate: Date;
 }
