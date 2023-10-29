@@ -44,9 +44,9 @@ const EventItem: FC<{
   }, [slot]);
 
   return (
-    <SlotEditPopup slotId={slot.id}>
+    <SlotEditPopup slotId={slot.id!}>
       <Box
-        onClick={() => (evManager.slotEditing = slot.id)}
+        onClick={() => (evManager.slotEditing = slot.id!)}
         onMouseDown={(e) => e.stopPropagation()}
         style={{
           top,

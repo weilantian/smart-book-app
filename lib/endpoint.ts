@@ -72,3 +72,6 @@ export const getEvent = (eventId: string) =>
 
 export const createBookable = (bookable: Bookable) =>
   axiosInstance.post<Bookable>("/bookable/", bookable);
+
+export const getBookableDetails = (id: string) =>
+  axiosInstance.get<Bookable>(`/bookable/${id}`);

@@ -37,10 +37,22 @@ export interface TimeSlot {
   endTime: Date;
 }
 
+export interface BookingDetail {
+  title: string;
+  description: string;
+  location: string;
+  duration: number;
+  slots: Array<{
+    start: Date;
+    end: Date;
+  }>;
+}
+
 export interface Bookable {
   id?: string;
   name: string;
   description: string;
+  duration: number;
   location: string;
 
   availableSlots: Array<TimeSlot>;

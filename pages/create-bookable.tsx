@@ -8,20 +8,16 @@ import {
   Divider,
   Group,
   Paper,
-  Stack,
-  TextInput,
   Title,
 } from "@mantine/core";
 import EventPageHeader from "../components/EventPageHeader";
 import useIsAuthorized from "../hooks/useIsAuthroized";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   IconCalendar,
   IconChevronDown,
   IconChevronRight,
-  IconHeading,
-  IconLocation,
 } from "@tabler/icons-react";
 import { Calendar } from "@mantine/dates";
 import EventManager from "../components/EventManager";
@@ -97,12 +93,16 @@ const IndexPage: NextPage = () => {
 
   const [state, send] = useAtom(bookableMachineAtom);
 
-  const slotsForRender = useMemo<Array<TimeSlot>>(() => {
-    if (!state.matches("creatingBookable.idle"))
-      return [...state.context.slots, state.context.newSlot];
+  const [slotsForRender, setSlotsForRender] = useState<Array<TimeSlot>>([]);
 
-    return [...state.context.slots];
-  }, [state]);
+  //TODO: May use useMemo, however nextjs throw a hydration error when using useMemo due to client server time difference
+  useEffect(() => {
+    if (!state.matches("creatingBookable.idle")) {
+      setSlotsForRender([...state.context.slots, state.context.newSlot]);
+      return;
+    }
+    setSlotsForRender([...state.context.slots]);
+  }, [state, state.context.slots]);
 
   useEffect(() => send("CREATE_BOOKABLE"), [send]);
 
