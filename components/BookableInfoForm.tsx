@@ -11,13 +11,14 @@ import { IconHeading, IconLocation } from "@tabler/icons-react";
 import { FC } from "react";
 import { Button } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { Bookable } from "@/lib/models";
 
 const BookableInfoForm: FC<{
-  onSubmit: (data: { title: string; location: string }) => void;
+  onSubmit: (data: Partial<Bookable>) => void;
 }> = ({ onSubmit }) => {
-  const form = useForm({
+  const form = useForm<Partial<Bookable>>({
     initialValues: {
-      title: "",
+      name: "",
       location: "",
       description: "",
       type: "ONE_TIME",
@@ -28,15 +29,22 @@ const BookableInfoForm: FC<{
       <Stack spacing={8}>
         <TextInput
           icon={<IconHeading />}
-          label="Title"
+          label="Name"
           placeholder="Daily Standup"
+          {...form.getInputProps("name")}
         />
         <TextInput
           icon={<IconLocation />}
           label="Location"
           placeholder="Location"
+          {...form.getInputProps("location")}
         />
-        <Textarea placeholder="Description" minRows={4} label="Description" />
+        <Textarea
+          placeholder="Description"
+          minRows={4}
+          label="Description"
+          {...form.getInputProps("description")}
+        />
         <Select
           label="Type"
           placeholder="Please select..."
@@ -50,6 +58,7 @@ const BookableInfoForm: FC<{
               label: "Recurring",
             },
           ]}
+          {...form.getInputProps("type")}
         />
         <Button
           sx={{

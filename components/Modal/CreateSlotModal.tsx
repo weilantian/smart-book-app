@@ -44,8 +44,8 @@ const CreateSlotModal: FC<
           mutate({
             booking: input.booking,
             eventId,
-            startDate: input.duration[0],
-            endDate: input.duration[1],
+            startTime: input.duration[0],
+            endTime: input.duration[1],
             availableParticipatorNum: unlimitedParticipators
               ? 0
               : input.participators,

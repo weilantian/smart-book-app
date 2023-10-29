@@ -5,7 +5,7 @@ import {
   type SignupDto,
   type Event,
   CreateSlotDto,
-  Slot,
+  Bookable,
 } from "./models";
 
 export const isAuthorized = () =>
@@ -67,11 +67,8 @@ export const createEvent = (eventName: string) =>
 export const deleteEvent = (eventId: string) =>
   axiosInstance.delete(`/event/${eventId}`);
 
-export const createSlot = (dto: CreateSlotDto) =>
-  axiosInstance.post<Slot>("/slot/create", dto);
-
-export const getSlotsOfEvent = (eventId: string) =>
-  axiosInstance.get<Array<Slot>>(`/slot/by-event?eventId=${eventId}`);
-
 export const getEvent = (eventId: string) =>
   axiosInstance.get<Event>(`/event/${eventId}`);
+
+export const createBookable = (bookable: Bookable) =>
+  axiosInstance.post<Bookable>("/bookable/", bookable);

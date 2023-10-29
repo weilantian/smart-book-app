@@ -31,14 +31,14 @@ const EventItem: FC<{
   const { classes, cx } = useStyles();
 
   const top = useMemo(() => {
-    const hour = slot.startDate.getHours();
-    const minutes = slot.startDate.getMinutes();
+    const hour = slot.startTime.getHours();
+    const minutes = slot.startTime.getMinutes();
 
     return COL_HEIGHT * (hour + minutes / 60);
   }, [slot]);
 
   const height = useMemo(() => {
-    const duration = slot.endDate.getTime() - slot.startDate.getTime();
+    const duration = slot.endTime.getTime() - slot.startTime.getTime();
     const minutes = duration / 1000 / 60;
     return COL_HEIGHT * (minutes / 60);
   }, [slot]);

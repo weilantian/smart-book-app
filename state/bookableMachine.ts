@@ -38,8 +38,8 @@ const bookableMachine = createMachine({
       id: uuidV4(),
       name: "Available Slot",
       description: "",
-      startDate: new Date(),
-      endDate: new Date(),
+      startTime: new Date(),
+      endTime: new Date(),
     },
   },
   states: {
@@ -68,11 +68,11 @@ const bookableMachine = createMachine({
                   event.pos
                 );
 
-                context.newSlot.startDate = date;
+                context.newSlot.startTime = date;
                 //Set end date to 30 minutes later
-                const endDate = new Date(date);
-                endDate.setMinutes(context.newSlot.startDate.getMinutes() + 30);
-                context.newSlot.endDate = endDate;
+                const endTime = new Date(date);
+                endTime.setMinutes(context.newSlot.startTime.getMinutes() + 30);
+                context.newSlot.endTime = endTime;
               },
             },
           },
@@ -87,7 +87,7 @@ const bookableMachine = createMachine({
                   context.gridHeight,
                   event.pos
                 );
-                context.newSlot.endDate = date;
+                context.newSlot.endTime = date;
               },
             },
             MOUSE_UP: {
@@ -100,8 +100,8 @@ const bookableMachine = createMachine({
                   id: uuidV4(),
                   name: "Available Slot",
                   description: "",
-                  startDate: new Date(),
-                  endDate: new Date(),
+                  startTime: new Date(),
+                  endTime: new Date(),
                 };
               },
             },

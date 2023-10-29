@@ -25,17 +25,13 @@ import {
 } from "@tabler/icons-react";
 import { Calendar } from "@mantine/dates";
 import EventManager from "../components/EventManager";
-import { TimeSlot } from "../lib/models";
+import { Bookable, TimeSlot } from "../lib/models";
 import { useAtom } from "jotai";
-import eventManagerStore from "../store/eventManagerStore";
 
-import useTraceUpdate from "../hooks/useTraceUpdate";
-
-import { useActor } from "@xstate/react";
-import bookableMachine from "../state/bookableMachine";
 import bookableMachineAtom from "../store/bookableMachineStore";
 import BookableInfoForm from "../components/BookableInfoForm";
 import SlotList from "../components/Slots/SlotList";
+import { createBookable } from "@/lib/endpoint";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -153,9 +149,7 @@ const IndexPage: NextPage = () => {
                 marginBottom: 12,
               }}
               position="apart"
-            >
-              <Title order={4}>New Booking</Title>
-            </Group>
+            ></Group>
             <Box
               sx={{
                 flex: 1,
@@ -175,7 +169,19 @@ const IndexPage: NextPage = () => {
               </Title>
               <SlotList slots={slotsForRender} />
               <Divider my="sm" />
-              <BookableInfoForm onSubmit={() => {}} />
+              <BookableInfoForm
+                onSubmit={(data) => {
+                  createBookable({
+                    ...data,
+                    availableSlots: state.context.slots.map((slot) => {
+                      return {
+                        startTime: slot.startTime,
+                        endTime: slot.endTime,
+                      };
+                    }),
+                  } as Bookable).then((response) => console.log(response.data));
+                }}
+              />
             </Box>
           </Box>
         </Paper>

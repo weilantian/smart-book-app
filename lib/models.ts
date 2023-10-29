@@ -29,20 +29,21 @@ export enum Role {
 }
 
 export interface TimeSlot {
-  id: string;
+  id?: string;
   name?: string;
   location?: string;
   description?: string;
-  startDate: Date;
-  endDate: Date;
+  startTime: Date;
+  endTime: Date;
 }
 
 export interface Bookable {
-  id: string;
+  id?: string;
   name: string;
   description: string;
+  location: string;
 
-  timeSlots: Array<TimeSlot>;
+  availableSlots: Array<TimeSlot>;
   type: "ONE_TIME" | "RECURRING";
 
   attendeeFirstName?: string;
@@ -66,8 +67,8 @@ export interface Event {
 export interface CreateSlotDto {
   eventId: string;
   availableParticipatorNum: number;
-  startDate: Date;
-  endDate: Date;
+  startTime: Date;
+  endTime: Date;
   booking: boolean;
 }
 
@@ -75,17 +76,4 @@ export enum SlotStatus {
   AVAILABLE = "AVAILABLE",
   FULL = "FULL",
   CANCELLED = "CANCELLED",
-}
-
-export interface Slot {
-  participatorNum: number;
-  id: string;
-  availableParticipatorNum: number;
-  startDate: Date;
-  endDate: Date;
-  booking: boolean;
-  participators?: Array<UserInfo>;
-  host?: UserInfo;
-  event?: Event;
-  status: SlotStatus;
 }

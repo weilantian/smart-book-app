@@ -86,19 +86,19 @@ const SlotListCard: FC<{ slot: TimeSlot }> = ({ slot }) => {
         icon={<IconCalendar className={classes.colouredText} size={18} />}
         title="Date"
       >
-        {format(slot.startDate, "yyyy-mm-dd")}
+        {format(slot.startTime, "yyyy-mm-dd")}
       </SlotListItem>
       <SlotListItem
         icon={<IconClock className={classes.colouredText} size={18} />}
         title="Start"
       >
-        {format(slot.startDate, "hh:mm a")}
+        {format(slot.startTime, "hh:mm a")}
       </SlotListItem>
       <SlotListItem
         icon={<IconClock className={classes.colouredText} size={18} />}
         title="End"
       >
-        {format(slot.endDate, "hh:mm a")}
+        {format(slot.endTime, "hh:mm a")}
       </SlotListItem>
     </Box>
   );

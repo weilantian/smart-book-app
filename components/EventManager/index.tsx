@@ -107,7 +107,7 @@ const EventManager: FC<{
   const getFilteredSloByDate = useCallback(
     (displayDate: Date) =>
       slots.filter(
-        (slot) => slot.startDate.getDate() === displayDate.getDate()
+        (slot) => slot.startTime.getDate() === displayDate.getDate()
       ),
 
     [slots]

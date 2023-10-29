@@ -44,8 +44,8 @@ const useStyles = createStyles((theme) => ({
 
 const Item: FC<{ slot: Slot }> = ({ slot }) => {
   const { classes } = useStyles();
-  const startDate = dayjs(slot.startDate);
-  const endDate = dayjs(slot.endDate);
+  const startTime = dayjs(slot.startTime);
+  const endTime = dayjs(slot.endTime);
   const router = useRouter();
   const [bookingDetail] = useAtom(bookingDetailStore);
   return (
@@ -69,7 +69,7 @@ const Item: FC<{ slot: Slot }> = ({ slot }) => {
             Start
           </Text>
           <Text weight="600" size="sm">
-            {dayjs(slot.startDate).format("L LT")}
+            {dayjs(slot.startTime).format("L LT")}
           </Text>
         </Group>
         <Group position="apart" spacing={8}>
@@ -85,7 +85,7 @@ const Item: FC<{ slot: Slot }> = ({ slot }) => {
             End
           </Text>
           <Text weight="600" size="sm">
-            {dayjs(slot.endDate).format("L LT")}
+            {dayjs(slot.endTime).format("L LT")}
           </Text>
         </Group>
         <Group position="apart" spacing={8}>
@@ -101,7 +101,7 @@ const Item: FC<{ slot: Slot }> = ({ slot }) => {
             Duration
           </Text>
           <Text weight="600" size="sm">
-            {endDate.diff(startDate, "minutes")} minutes
+            {endTime.diff(startTime, "minutes")} minutes
           </Text>
         </Group>
         <Group position="apart" spacing={8}>
