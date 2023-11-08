@@ -37,8 +37,14 @@ export interface TimeSlot {
   endTime: Date;
 }
 
+export interface Slot {
+  start: Date;
+  end: Date;
+}
+
 export interface BookingDetail {
-  title: string;
+  id?: string;
+  name: string;
   description: string;
   location: string;
   duration: number;
@@ -47,6 +53,8 @@ export interface BookingDetail {
     end: Date;
   }>;
 }
+
+export interface BookingResponse {}
 
 export interface Bookable {
   id?: string;
@@ -88,4 +96,24 @@ export enum SlotStatus {
   AVAILABLE = "AVAILABLE",
   FULL = "FULL",
   CANCELLED = "CANCELLED",
+}
+
+export interface AttendeeInfo {
+  attendeeFirstName: string;
+  attendeeLastName: string;
+  attendeeEmail: string;
+}
+
+export interface ScheduleBookingInput extends AttendeeInfo {
+  startTime: string;
+  endTime: string;
+}
+
+export interface BookedSlot extends AttendeeInfo {
+  id: string;
+  duration: number;
+  startTime: Date;
+  endTime: Date;
+  bookableId: string;
+  bookable: Partial<Bookable>;
 }

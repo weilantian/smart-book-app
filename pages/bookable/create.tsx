@@ -10,8 +10,8 @@ import {
   Paper,
   Title,
 } from "@mantine/core";
-import EventPageHeader from "../components/EventPageHeader";
-import useIsAuthorized from "../hooks/useIsAuthroized";
+import EventPageHeader from "@/components/EventPageHeader";
+import useIsAuthorized from "@/hooks/useIsAuthroized";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
@@ -20,14 +20,15 @@ import {
   IconChevronRight,
 } from "@tabler/icons-react";
 import { Calendar } from "@mantine/dates";
-import EventManager from "../components/EventManager";
-import { Bookable, TimeSlot } from "../lib/models";
+import EventManager from "@/components/EventManager";
+import { Bookable, TimeSlot } from "@/lib/models";
 import { useAtom } from "jotai";
 
-import bookableMachineAtom from "../store/bookableMachineStore";
-import BookableInfoForm from "../components/BookableInfoForm";
-import SlotList from "../components/Slots/SlotList";
+import bookableMachineAtom from "@/store/bookableMachineStore";
+import BookableInfoForm from "@/components/BookableInfoForm";
+import SlotList from "@/components/Slots/SlotList";
 import { createBookable } from "@/lib/endpoint";
+import Head from "next/head";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -80,7 +81,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const IndexPage: NextPage = () => {
+const CreateBookablePage: NextPage = () => {
   const router = useRouter();
   const { isAuthorized } = useIsAuthorized();
   useEffect(() => {
@@ -108,6 +109,9 @@ const IndexPage: NextPage = () => {
 
   return (
     <div className={classes.container}>
+      <Head>
+        <title>Create a new booking - Smart Book</title>
+      </Head>
       <EventPageHeader title="Create a new Booking" />
       <div className={classes.inner}>
         <Paper className={cx(classes.paper, classes.sideBar)}>
@@ -173,6 +177,7 @@ const IndexPage: NextPage = () => {
                 onSubmit={(data) => {
                   createBookable({
                     ...data,
+
                     availableSlots: state.context.slots.map((slot) => {
                       return {
                         startTime: slot.startTime,
@@ -197,4 +202,4 @@ const IndexPage: NextPage = () => {
   );
 };
 
-export default IndexPage;
+export default CreateBookablePage;

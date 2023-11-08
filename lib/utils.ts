@@ -50,3 +50,12 @@ export const calculateDuration = ({
   hours: number;
   minutes: number;
 }) => (hours * 60 + minutes) * 60 * 1000;
+
+export const computeDurationText = (duration: number) => {
+  const minutes = Math.floor(duration / 1000 / 60);
+  const hours = Math.floor(minutes / 60);
+  // If less then 1 hour, return minutes
+  if (hours === 0) return `${minutes} min`;
+  if (minutes % 60 === 0) return `${hours} h`;
+  return `${hours} h ${minutes % 60} min`;
+};

@@ -1,6 +1,8 @@
 import {
   Box,
+  Divider,
   Group,
+  NumberInput,
   Select,
   Stack,
   TextInput,
@@ -12,20 +14,40 @@ import { FC } from "react";
 import { Button } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Bookable } from "@/lib/models";
+import { calculateDuration } from "@/lib/utils";
+
+interface BookableInfoFormValues {
+  name: string;
+  location: string;
+  description: string;
+  type: "ONE_TIME" | "RECURRING";
+  hours: number;
+  minutes: number;
+}
 
 const BookableInfoForm: FC<{
   onSubmit: (data: Partial<Bookable>) => void;
 }> = ({ onSubmit }) => {
-  const form = useForm<Partial<Bookable>>({
+  const form = useForm<BookableInfoFormValues>({
     initialValues: {
       name: "",
       location: "",
       description: "",
+      hours: 0,
+      minutes: 30,
       type: "ONE_TIME",
     },
   });
   return (
-    <form onSubmit={form.onSubmit(onSubmit)}>
+    <form
+      onSubmit={form.onSubmit((data) => {
+        const { hours, minutes, ...dataToSubmit } = data;
+        onSubmit({
+          ...dataToSubmit,
+          duration: calculateDuration({ hours, minutes }),
+        });
+      })}
+    >
       <Stack spacing={8}>
         <TextInput
           icon={<IconHeading />}
@@ -45,6 +67,21 @@ const BookableInfoForm: FC<{
           label="Description"
           {...form.getInputProps("description")}
         />
+        <Divider />
+        <Title order={5}>Duration</Title>
+        <Group grow>
+          <NumberInput
+            placeholder=""
+            label="Hours"
+            {...form.getInputProps("hours")}
+          />
+          <NumberInput
+            placeholder=""
+            label="Minutes"
+            {...form.getInputProps("minutes")}
+          />
+        </Group>
+        <Divider />
         <Select
           label="Type"
           placeholder="Please select..."

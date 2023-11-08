@@ -6,7 +6,10 @@ import {
   type Event,
   CreateSlotDto,
   Bookable,
+  ScheduleBookingInput,
+  BookedSlot,
 } from "./models";
+import { z } from "zod";
 
 export const isAuthorized = () =>
   localStorage.getItem("smart_book_token") ? true : false;
@@ -75,3 +78,32 @@ export const createBookable = (bookable: Bookable) =>
 
 export const getBookableDetails = (id: string) =>
   axiosInstance.get<Bookable>(`/bookable/${id}`);
+
+export const scheduleBooking = (
+  bookableId: string,
+  scheduleBookingInput: ScheduleBookingInput
+) => axiosInstance.post(`/bookable/${bookableId}/book`, scheduleBookingInput);
+
+export const getCurrentUserBookings = async (
+  startDate?: Date,
+  endDate?: Date
+): Promise<Array<BookedSlot>> => {
+  const response = await axiosInstance.get<Array<BookedSlot>>("/booking");
+  const schema = z.array(
+    z.object({
+      id: z.string(),
+      duration: z.number(),
+      startTime: z.string().transform((val) => new Date(val)),
+      endTime: z.string().transform((val) => new Date(val)),
+      bookableId: z.string(),
+      bookable: z.object({
+        id: z.string(),
+        name: z.string(),
+      }),
+      attendeeFirstName: z.string(),
+      attendeeLastName: z.string(),
+      attendeeEmail: z.string(),
+    })
+  );
+  return schema.parse(response.data);
+};

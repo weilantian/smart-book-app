@@ -1,5 +1,11 @@
-# Smart Book App
+# Smart Book
 
-A online booking management service built upon modern web technologies.
+A full-stack project designed to provide an intuitive scheduling experience.
 
-Backend Repo: https://github.com/weilantian/smart-book-server
+## Features
+
+### Create a booking link with a single click
+
+Scheduling is never easy, as different participators have their availability varies.
+
+Smart Book create a scheduling link for participators of a event based on your availability.
