@@ -1,13 +1,23 @@
-import { Box, Popover, Text } from "@mantine/core";
+import {
+  Badge,
+  Box,
+  Divider,
+  Group,
+  Popover,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useAtom } from "jotai";
 
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import eventManagerStore from "../../store/eventManagerStore";
 import { useClickOutside } from "@mantine/hooks";
+import { TimeSlot } from "@/lib/models";
+import { IconClick, IconClock, IconMan, IconUser } from "@tabler/icons-react";
 
-const SlotEditPopup: FC<PropsWithChildren<{ slotId: string }>> = ({
+const SlotEditPopup: FC<PropsWithChildren<{ slot: TimeSlot }>> = ({
   children,
-  slotId,
+  slot,
 }) => {
   const [eventManager, setEvManager] = useAtom(eventManagerStore);
   const ref = useClickOutside(() =>
@@ -16,7 +26,7 @@ const SlotEditPopup: FC<PropsWithChildren<{ slotId: string }>> = ({
 
   return (
     <Popover
-      opened={eventManager.slotEditing === slotId}
+      opened={eventManager.slotEditing === slot.id}
       withinPortal
       transition="pop"
       position="right-start"
@@ -27,9 +37,37 @@ const SlotEditPopup: FC<PropsWithChildren<{ slotId: string }>> = ({
       <Popover.Target>{children}</Popover.Target>
       <Popover.Dropdown>
         <Box>
-          <Text size="sm">
-            This is uncontrolled popover, it is opened when button is clicked
-          </Text>
+          <Title order={4}>{slot.name}</Title>
+          <Badge mt={4} size="lg">
+            <Group spacing={4}>
+              <IconClock size={12} />
+              {slot.startTime.toLocaleDateString("en-AU", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}{" "}
+              {slot.endTime.toLocaleTimeString()} -{" "}
+              {slot.endTime.toLocaleTimeString()}
+            </Group>
+          </Badge>
+
+          <Divider
+            sx={{
+              marginTop: 12,
+              marginBottom: 12,
+            }}
+          />
+
+          {slot.slotDetail &&
+            slot.slotDetail.map((item) => (
+              <Group
+                mt={4}
+                sx={(theme) => ({ color: theme.colors.gray[5] })}
+                spacing={5}
+              >
+                {item.icon} <Text color="black">{item.value}</Text>
+              </Group>
+            ))}
         </Box>
       </Popover.Dropdown>
     </Popover>

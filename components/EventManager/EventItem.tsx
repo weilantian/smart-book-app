@@ -5,13 +5,19 @@ import eventManagerStore from "../../store/eventManagerStore";
 import { TimeSlot } from "../../lib/models";
 import { COL_HEIGHT } from "../../config";
 import SlotEditPopup from "../Slots/SlotEditPopup";
+import { Text } from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({
   container: {
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.blue[0]
+        : theme.colors.blue[9],
     display: "flex",
     position: "absolute",
     width: "100%",
     borderRadius: theme.radius.md,
+
     top: 0,
     border:
       theme.colorScheme === "dark"
@@ -19,8 +25,8 @@ const useStyles = createStyles((theme) => ({
         : `1px solid ${theme.colors.gray[0]}`,
     backgroundColor:
       theme.colorScheme === "dark"
-        ? theme.colors.dark[5]
-        : theme.colors.gray[1],
+        ? theme.colors.blue[5]
+        : theme.colors.blue[1],
   },
 }));
 
@@ -44,7 +50,7 @@ const EventItem: FC<{
   }, [slot]);
 
   return (
-    <SlotEditPopup slotId={slot.id!}>
+    <SlotEditPopup slot={slot}>
       <Box
         onClick={() => (evManager.slotEditing = slot.id!)}
         onMouseDown={(e) => e.stopPropagation()}
@@ -55,7 +61,7 @@ const EventItem: FC<{
         }}
         className={cx(classes.container)}
       >
-        <div>Event</div>
+        <Text truncate> {slot.name}</Text>
       </Box>
     </SlotEditPopup>
   );

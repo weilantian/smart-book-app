@@ -105,8 +105,6 @@ const CreateBookablePage: NextPage = () => {
     setSlotsForRender([...state.context.slots]);
   }, [state, state.context.slots]);
 
-  useEffect(() => send("CREATE_BOOKABLE"), [send]);
-
   return (
     <div className={classes.container}>
       <Head>

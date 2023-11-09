@@ -1,7 +1,7 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
-import Layout from "../components/Layout";
+
 import { NextPage } from "next";
 import { ReactElement, ReactNode, useEffect } from "react";
 import RouterTransition from "../components/RouterTransition";
@@ -12,8 +12,16 @@ import { LocaleProvider } from "@douyinfe/semi-ui";
 import en_US from "@douyinfe/semi-ui/lib/es/locale/source/en_US";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
-import { inspect } from "@xstate/inspect";
+
 import { Provider } from "jotai";
+
+// if (typeof window !== "undefined") {
+//   inspect({
+//     // options
+//     // url: 'https://stately.ai/viz?inspect', // (default)
+//     iframe: false, // open in new window
+//   });
+// }
 
 dayjs.extend(LocalizedFormat);
 
@@ -42,23 +50,24 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider
-          theme={{
-            colorScheme: "light",
-          }}
-          withGlobalStyles
-          withNormalizeCSS
-        >
-          <ModalsProvider>
-            <LocaleProvider locale={en_US}>
-              <RouterTransition />
-              {getLayout(<Component {...pageProps} />)}
-            </LocaleProvider>
-          </ModalsProvider>
-        </MantineProvider>
-      </QueryClientProvider>
+      <Provider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider
+            theme={{
+              colorScheme: "light",
+            }}
+            withGlobalStyles
+            withNormalizeCSS
+          >
+            <ModalsProvider>
+              <LocaleProvider locale={en_US}>
+                <RouterTransition />
+                {getLayout(<Component {...pageProps} />)}
+              </LocaleProvider>
+            </ModalsProvider>
+          </MantineProvider>
+        </QueryClientProvider>
+      </Provider>
     </>
   );
 }

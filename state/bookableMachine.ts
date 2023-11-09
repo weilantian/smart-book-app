@@ -55,6 +55,7 @@ const bookableMachine = createMachine({
     },
     creatingBookable: {
       initial: "idle",
+
       states: {
         idle: {
           on: {
@@ -73,6 +74,19 @@ const bookableMachine = createMachine({
                 const endTime = new Date(date);
                 endTime.setMinutes(context.newSlot.startTime.getMinutes() + 30);
                 context.newSlot.endTime = endTime;
+              },
+            },
+            NAVIGATE_TO_HOME: {
+              target: "#bookableMachine.idle",
+              actions: (context) => {
+                context.slots = [];
+                context.newSlot = {
+                  id: uuidV4(),
+                  name: "Available Slot",
+                  description: "",
+                  startTime: new Date(),
+                  endTime: new Date(),
+                };
               },
             },
           },
@@ -104,9 +118,6 @@ const bookableMachine = createMachine({
                   endTime: new Date(),
                 };
               },
-            },
-            NAVIGATE_TO_HOME: {
-              target: "#bookableMachine.idle",
             },
           },
         },

@@ -50,6 +50,7 @@ const CalendarRow: FC<{
     <Grid.Col
       onMouseDown={(e) => {
         if (eventManager.slotEditing !== null) {
+          if (e.target !== e.currentTarget) return;
           setEventManager({ ...eventManager, slotEditing: null });
           return;
         }

@@ -1,3 +1,4 @@
+import useCurrentUser from "@/hooks/useCurrentUser";
 import {
   Box,
   createStyles,
@@ -5,11 +6,14 @@ import {
   Text,
   Button,
   UnstyledButton,
+  Avatar,
+  Menu,
 } from "@mantine/core";
 import {
   IconCalendarEvent,
   IconDots,
   IconEdit,
+  IconSettings,
   IconShare,
 } from "@tabler/icons-react";
 
@@ -68,10 +72,29 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+const UserWidget: FC = () => {
+  const { data } = useCurrentUser();
+  return (
+    <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <Button variant="subtle">
+          <Avatar />
+          <Text>{data?.data.name}</Text>
+        </Button>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Label>Application</Menu.Label>
+        <Menu.Item>Settings</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
+};
+
 const EventPageHeader: FC<{
   title?: string;
   home?: boolean;
-}> = ({ home, title }) => {
+  widgets?: React.ReactNode;
+}> = ({ home, title, widgets }) => {
   const { classes } = useStyles();
 
   return (
@@ -92,9 +115,9 @@ const EventPageHeader: FC<{
         </UnstyledButton>
       </Group>
       <Group spacing="sm">
-        <Button leftIcon={<IconShare size={18} />} size="sm">
-          Share
-        </Button>
+        {" "}
+        <UserWidget />
+        {widgets}
       </Group>
     </Group>
   );

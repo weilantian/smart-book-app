@@ -236,7 +236,11 @@ const SlotsBlock: FC<{
         {slots.length ? (
           <Stack>
             {slots.map((slot) => (
-              <SlotItem onClick={onSelectSlot} slot={slot} />
+              <SlotItem
+                key={JSON.stringify(slot)}
+                onClick={onSelectSlot}
+                slot={slot}
+              />
             ))}
           </Stack>
         ) : (

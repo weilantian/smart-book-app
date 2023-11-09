@@ -12,12 +12,14 @@ import {
 } from "@mantine/core";
 import EventPageHeader from "@/components/EventPageHeader";
 import useIsAuthorized from "@/hooks/useIsAuthroized";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import {
   IconCalendar,
   IconChevronDown,
   IconChevronRight,
+  IconPlus,
+  IconUser,
 } from "@tabler/icons-react";
 import { Calendar } from "@mantine/dates";
 import EventManager from "@/components/EventManager";
@@ -30,6 +32,8 @@ import SlotList from "@/components/Slots/SlotList";
 import { createBookable, getCurrentUserBookings } from "@/lib/endpoint";
 import Head from "next/head";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import dayjs from "dayjs";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -83,11 +87,6 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const CreateBookablePage: NextPage = () => {
-  const { data } = useQuery({
-    queryFn: () => getCurrentUserBookings(),
-    queryKey: ["bookings"],
-  });
-
   const router = useRouter();
   const { isAuthorized } = useIsAuthorized();
   useEffect(() => {
@@ -98,25 +97,60 @@ const CreateBookablePage: NextPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(false);
 
+  const startEndOfCurrentWeek = useMemo(() => {
+    return {
+      startDate: dayjs(selectedDate ?? new Date())
+        .startOf("week")
+        .toDate(),
+      endDate: dayjs(selectedDate ?? new Date())
+        .endOf("week")
+        .toDate(),
+    };
+  }, [selectedDate]);
+
   const [state, send] = useAtom(bookableMachineAtom);
 
   const [slotsForRender, setSlotsForRender] = useState<Array<TimeSlot>>([]);
 
+  const { data } = useQuery({
+    queryFn: () => getCurrentUserBookings(startEndOfCurrentWeek),
+    queryKey: ["bookings", startEndOfCurrentWeek],
+  });
+
   //TODO: May use useMemo, however nextjs throw a hydration error when using useMemo due to client server time difference
   useEffect(() => {
     if (!data) return;
-    console.log(data);
-    setSlotsForRender(data);
-  }, [data]);
 
-  useEffect(() => send("NAVIGATE_TO_HOME"), [send]);
+    setSlotsForRender(
+      data.map((slot) => ({
+        ...slot,
+        name: `${slot.bookable.name}`,
+        slotDetail: [
+          {
+            title: "Booked by",
+            icon: <IconUser />,
+            value: slot.attendeeFirstName + " " + slot.attendeeLastName,
+          },
+        ],
+      }))
+    );
+  }, [data]);
 
   return (
     <div className={classes.container}>
       <Head>
-        <title>Create a new booking - Smart Book</title>
+        <title>Smart Book</title>
       </Head>
-      <EventPageHeader title="Create a new Booking" />
+      <EventPageHeader
+        home
+        widgets={
+          <Link href="/bookable/create">
+            <Button leftIcon={<IconPlus size={18} />} size="sm">
+              New Booking
+            </Button>
+          </Link>
+        }
+      />
       <div className={classes.inner}>
         <Paper className={cx(classes.paper, classes.sideBar)}>
           <Group spacing="xs" align="center">

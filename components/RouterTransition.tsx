@@ -5,8 +5,11 @@ import {
   completeNavigationProgress,
   NavigationProgress,
 } from "@mantine/nprogress";
+import { useAtom } from "jotai";
+import bookableMachineAtom from "@/store/bookableMachineStore";
 
 const RouterTransition: FC = () => {
+  const [state, send] = useAtom(bookableMachineAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,12 +21,18 @@ const RouterTransition: FC = () => {
     router.events.on("routeChangeComplete", handleComplete);
     router.events.on("routeChangeError", handleComplete);
 
+    if (router.asPath === "/") {
+      send("NAVIGATE_TO_HOME");
+    } else if (router.asPath === "/bookable/create") {
+      send("CREATE_BOOKABLE");
+    }
+
     return () => {
       router.events.off("routeChangeStart", handleStart);
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
-  }, [router.asPath]);
+  }, [router.asPath, router.events, send]);
   return <NavigationProgress autoReset={true} />;
 };
 

@@ -25,6 +25,17 @@ const axiosInstance = axios.create({
   },
 });
 
+// On there is a 400 error, remove the local storage token
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      localStorage.removeItem("smart_book_token");
+    }
+    return Promise.reject(error);
+  }
+);
+
 // const handleResponse = <T = any, R = AxiosResponse<T>>(request: Promise<R>) => {
 //   return request
 //     .then((response) => {
@@ -52,8 +63,7 @@ export const signup = async (dto: SignupDto) =>
 export const login = async (dto: LoginDto) =>
   await axiosInstance.post("/auth/login", dto);
 
-export const getCurrentUser = async () =>
-  await axiosInstance.get<UserInfo>("/user/me");
+export const getCurrentUser = () => axiosInstance.get<UserInfo>("/user/me");
 
 export const getUserManagedEvents = async (showEnded: boolean) =>
   await axiosInstance.get<Array<Event>>("/event/user-managed-events", {
@@ -84,11 +94,19 @@ export const scheduleBooking = (
   scheduleBookingInput: ScheduleBookingInput
 ) => axiosInstance.post(`/bookable/${bookableId}/book`, scheduleBookingInput);
 
-export const getCurrentUserBookings = async (
-  startDate?: Date,
-  endDate?: Date
-): Promise<Array<BookedSlot>> => {
-  const response = await axiosInstance.get<Array<BookedSlot>>("/booking");
+export const getCurrentUserBookings = async ({
+  startDate,
+  endDate,
+}: {
+  startDate?: Date;
+  endDate?: Date;
+}): Promise<Array<BookedSlot>> => {
+  const response = await axiosInstance.get<Array<BookedSlot>>("/booking", {
+    params: {
+      startDate: startDate?.toISOString(),
+      endDate: endDate?.toISOString(),
+    },
+  });
   const schema = z.array(
     z.object({
       id: z.string(),

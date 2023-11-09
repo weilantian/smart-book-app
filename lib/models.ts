@@ -28,6 +28,12 @@ export enum Role {
   PARTICIPATOR = "PARTICIPATOR",
 }
 
+export interface SlotDetailItem {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+}
+
 export interface TimeSlot {
   id?: string;
   name?: string;
@@ -35,6 +41,7 @@ export interface TimeSlot {
   description?: string;
   startTime: Date;
   endTime: Date;
+  slotDetail?: Array<SlotDetailItem>;
 }
 
 export interface Slot {
