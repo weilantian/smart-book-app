@@ -75,7 +75,7 @@ const SlotListCard: FC<{ slot: TimeSlot }> = ({ slot }) => {
   const [evManager, setEvManager] = useAtom(eventManagerStore);
   return (
     <Box
-      onClick={() => setEvManager({ ...evManager, slotEditing: slot.id })}
+      onClick={() => setEvManager({ ...evManager, slotEditing: slot.id! })}
       className={classes.cardWrapper}
       sx={{
         display: "flex",

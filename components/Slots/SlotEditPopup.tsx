@@ -46,7 +46,7 @@ const SlotEditPopup: FC<PropsWithChildren<{ slot: TimeSlot }>> = ({
                 month: "long",
                 day: "numeric",
               })}{" "}
-              {slot.endTime.toLocaleTimeString()} -{" "}
+              {slot.startTime.toLocaleTimeString()} -{" "}
               {slot.endTime.toLocaleTimeString()}
             </Group>
           </Badge>

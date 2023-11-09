@@ -17,7 +17,8 @@ const useStyles = createStyles((theme) => ({
     position: "absolute",
     width: "100%",
     borderRadius: theme.radius.md,
-
+    transition: "all 80ms ease",
+    userSelect: "none",
     top: 0,
     border:
       theme.colorScheme === "dark"

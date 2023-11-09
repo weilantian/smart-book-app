@@ -52,7 +52,7 @@ const useStyles = createStyles((theme) => ({
     paddingRight: theme.spacing.lg,
     display: "flex",
     boxSizing: "border-box",
-
+    height: "80%",
     alignItems: "stretch",
   },
   paper: {
@@ -137,54 +137,58 @@ const CreateBookablePage: NextPage = () => {
               />
             </Box>
           </Collapse>
-
           <Box
             sx={{
+              overflowY: "scroll",
               flex: 1,
               flexDirection: "column",
               display: "flex",
             }}
           >
-            <Divider my="sm" />
-            <Group
-              sx={{
-                marginBottom: 12,
-              }}
-              position="apart"
-            ></Group>
-            <Box
-              sx={{
-                flex: 1,
-
-                overflowY: "scroll",
-                minHeight: 0,
-                paddingRight: 8,
-              }}
-            >
-              <Title
-                style={{
-                  marginBottom: 4,
-                }}
-                order={6}
-              >
-                When I will be available
-              </Title>
-              <SlotList slots={slotsForRender} />
+            <Box sx={{}}>
               <Divider my="sm" />
-              <BookableInfoForm
-                onSubmit={(data) => {
-                  createBookable({
-                    ...data,
-
-                    availableSlots: state.context.slots.map((slot) => {
-                      return {
-                        startTime: slot.startTime,
-                        endTime: slot.endTime,
-                      };
-                    }),
-                  } as Bookable).then((response) => console.log(response.data));
+              <Group
+                sx={{
+                  marginBottom: 12,
                 }}
-              />
+                position="apart"
+              ></Group>
+              <Box
+                sx={{
+                  flex: 1,
+
+                  overflowY: "scroll",
+                  minHeight: 0,
+                  paddingRight: 8,
+                }}
+              >
+                <Title
+                  style={{
+                    marginBottom: 4,
+                  }}
+                  order={6}
+                >
+                  When I will be available
+                </Title>
+                <SlotList slots={slotsForRender} />
+                <Divider my="sm" />
+                <BookableInfoForm
+                  onSubmit={(data) => {
+                    createBookable({
+                      ...data,
+
+                      availableSlots: state.context.slots.map((slot) => {
+                        return {
+                          startTime: slot.startTime,
+                          endTime: slot.endTime,
+                        };
+                      }),
+                    } as Bookable).then((response) =>
+                      console.log(response.data)
+                    );
+                  }}
+                />
+              </Box>
             </Box>
           </Box>
         </Paper>
