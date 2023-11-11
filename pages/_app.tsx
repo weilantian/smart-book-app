@@ -52,13 +52,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <Provider>
         <QueryClientProvider client={queryClient}>
-          <MantineProvider
-            theme={{
-              colorScheme: "light",
-            }}
-            withGlobalStyles
-            withNormalizeCSS
-          >
+          <MantineProvider withGlobalStyles withNormalizeCSS>
             <ModalsProvider>
               <LocaleProvider locale={en_US}>
                 <RouterTransition />

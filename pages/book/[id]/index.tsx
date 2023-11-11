@@ -23,14 +23,20 @@ import { z } from "zod";
 const useStyles = createStyles((theme) => ({
   wrapper: {
     width: "100%",
-    backgroundColor: theme.colors.gray[0],
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[7]
+        : theme.colors.gray[0],
     height: "100vh",
     paddingTop: 80,
   },
   container: {
-    backgroundColor: "#fff",
+    backgroundColor:
+      theme.colorScheme === "dark" ? theme.colors.dark[6] : "#fff",
     margin: "0 auto",
-    border: `1px solid ${theme.colors.gray[3]}`,
+    border: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[3]
+    }`,
     boxShadow: theme.shadows.md,
     padding: theme.spacing.md,
     borderRadius: theme.radius.md,
