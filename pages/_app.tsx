@@ -1,10 +1,7 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
-import {
-  ColorScheme,
-  ColorSchemeProvider,
-  MantineProvider,
-} from "@mantine/core";
+
+import { MantineProvider, createTheme } from "@mantine/core";
 
 import { NextPage } from "next";
 import { ReactElement, ReactNode, useEffect } from "react";
@@ -46,13 +43,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     body.setAttribute("theme-mode", "dark");
   }, []);
 
-  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
-    key: "smart-book-color-scheme",
-    defaultValue: "light",
-    getInitialValueInEffect: true,
-  });
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  const theme = createTheme({});
 
   return (
     <>
@@ -65,25 +56,14 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <Provider>
         <QueryClientProvider client={queryClient}>
-          <ColorSchemeProvider
-            colorScheme={colorScheme}
-            toggleColorScheme={toggleColorScheme}
-          >
-            <MantineProvider
-              theme={{
-                colorScheme,
-              }}
-              withGlobalStyles
-              withNormalizeCSS
-            >
-              <ModalsProvider>
-                <LocaleProvider locale={en_US}>
-                  <RouterTransition />
-                  {getLayout(<Component {...pageProps} />)}
-                </LocaleProvider>
-              </ModalsProvider>
-            </MantineProvider>
-          </ColorSchemeProvider>
+          <MantineProvider theme={theme}>
+            <ModalsProvider>
+              <LocaleProvider locale={en_US}>
+                <RouterTransition />
+                {getLayout(<Component {...pageProps} />)}
+              </LocaleProvider>
+            </ModalsProvider>
+          </MantineProvider>
         </QueryClientProvider>
       </Provider>
     </>
