@@ -1,6 +1,6 @@
 {
-  "name": "PWA App",
-  "short_name": "App",
+  "name": "Smart Book",
+  "short_name": "Smart Book",
   "icons": [
     {
       "src": "icons/icon-48x48.png",
@@ -57,7 +57,7 @@
       "purpose": "maskable any"
     }
   ],
-  "theme_color": "#FFFFFF",
+  "theme_color": "#f8f9fa",
   "background_color": "#FFFFFF",
   "start_url": "/",
   "display": "standalone",
