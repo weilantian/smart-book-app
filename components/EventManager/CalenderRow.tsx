@@ -34,7 +34,7 @@ const CalendarRow: FC<{
   };
 
   return (
-    <Grid.Col
+    <Box
       onMouseDown={(e) => {
         if (eventManager.slotEditing !== null) {
           if (e.target !== e.currentTarget) return;
@@ -62,8 +62,8 @@ const CalendarRow: FC<{
       style={{
         padding: 0,
         position: "relative",
+        flex: 1,
       }}
-      span={1}
     >
       {slots.map((slot) => {
         return <EventItem slot={{ ...slot }} key={slot.id} />;
@@ -76,7 +76,7 @@ const CalendarRow: FC<{
             <Cell key={i} />
           ))}
       </Box>
-    </Grid.Col>
+    </Box>
   );
 };
 

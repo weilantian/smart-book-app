@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Group, Stack, Text } from "@mantine/core";
+import { Box, Button, Flex, Grid, Group, Stack, Text } from "@mantine/core";
 import CalenderRow from "./CalenderRow";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import {
@@ -165,8 +165,7 @@ const EventManager: FC<{
                 position: "relative",
               }}
             >
-              <CurrentTimeMarker />
-              <Grid ref={gridRef} columns={7}>
+              <Flex ref={gridRef}>
                 {currentWeek.map((date) => (
                   <CalenderRow
                     key={date.toISOString()}
@@ -174,7 +173,7 @@ const EventManager: FC<{
                     date={date}
                   />
                 ))}
-              </Grid>
+              </Flex>
             </Box>
           </Box>
         </Box>

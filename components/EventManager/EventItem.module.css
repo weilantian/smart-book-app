@@ -23,4 +23,23 @@
 })); */
 
 .container {
+  color: var(--mantine-color-blue-9);
+  @mixin dark {
+    color: var(--mantine-color-blue-0);
+  }
+  display: flex;
+  position: absolute;
+  width: 100%;
+  border-radius: var(--mantine-radius-md);
+  transition: all 80ms ease;
+  user-select: none;
+  top: 0;
+  border: 1px solid var(--mantine-color-blue-2);
+  @mixin dark {
+    border: 1px solid var(--mantine-color-blue-outline);
+  }
+  background-color: var(--mantine-color-blue-1);
+  @mixin dark {
+    background-color: var(--mantine-color-blue-light);
+  }
 }

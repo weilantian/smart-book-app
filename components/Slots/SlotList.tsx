@@ -1,4 +1,4 @@
-import { Box, Group, createStyles, Text, Flex } from "@mantine/core";
+import { Box, Group, Text, Flex } from "@mantine/core";
 import { FC, PropsWithChildren, ReactElement } from "react";
 import { TimeSlot } from "../../lib/models";
 import { IconCalculator, IconCalendar, IconClock } from "@tabler/icons-react";
@@ -7,65 +7,28 @@ import SlotEditPopup from "./SlotEditPopup";
 import { useAtom } from "jotai";
 import eventManagerStore from "../../store/eventManagerStore";
 
-const useStyles = createStyles((theme) => ({
-  cardWrapper: {
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.fn.darken(theme.colors.blue[9], 0.5)
-        : theme.colors.blue[0],
-
-    paddingTop: theme.spacing.xs,
-    paddingBottom: theme.spacing.xs,
-    paddingLeft: theme.spacing.sm,
-    paddingRight: theme.spacing.sm,
-
-    borderRadius: theme.radius.sm,
-  },
-  container: {
-    display: "flex",
-    width: "fit-content",
-    alignItems: "center",
-  },
-  colouredText: {
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.blue[2]
-        : theme.colors.blue[9],
-  },
-}));
+import classes from "./SlotList.module.css";
 
 const SlotListItem: FC<
   PropsWithChildren<{ icon: ReactElement; title: string }>
 > = ({ icon, title, children }) => {
-  const { classes } = useStyles();
-
   return (
     <Box className={classes.container}>
       <Box
-        sx={{
+        style={{
           marginRight: "4px",
         }}
         className={classes.container}
       >
         {icon}
-        <Text
-          sx={(theme) => ({
-            marginLeft: "2px",
-            color:
-              theme.colorScheme === "dark"
-                ? theme.colors.blue[1]
-                : theme.colors.blue[8],
-          })}
-          fw={600}
-          fz="sm"
-        >
+        <Text className={classes.slotItemText} fw={600} fz="sm">
           {title}
         </Text>
       </Box>
       <Text
         className={classes.colouredText}
         fz="sm"
-        sx={{
+        style={{
           whiteSpace: "nowrap",
         }}
         inline
@@ -77,13 +40,12 @@ const SlotListItem: FC<
 };
 
 const SlotListCard: FC<{ slot: TimeSlot }> = ({ slot }) => {
-  const { classes } = useStyles();
   const [evManager, setEvManager] = useAtom(eventManagerStore);
   return (
     <Box
       onClick={() => setEvManager({ ...evManager, slotEditing: slot.id! })}
       className={classes.cardWrapper}
-      sx={{
+      style={{
         display: "flex",
         flexDirection: "column",
       }}
@@ -113,13 +75,13 @@ const SlotListCard: FC<{ slot: TimeSlot }> = ({ slot }) => {
 const SlotList: FC<{ slots: Array<TimeSlot> }> = ({ slots }) => {
   return (
     <Box
-      sx={{
+      style={{
         overflowX: "scroll",
         minWidth: 0,
       }}
     >
       <Box
-        sx={{
+        style={{
           display: "inline-flex",
           gap: 8,
         }}

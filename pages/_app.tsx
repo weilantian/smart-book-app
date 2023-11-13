@@ -1,4 +1,6 @@
 import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
+import "@mantine/nprogress/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
