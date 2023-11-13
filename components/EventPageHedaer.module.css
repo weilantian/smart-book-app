@@ -1,0 +1,51 @@
+.container {
+  padding-top: var(--mantine-spacing-sm);
+  padding-right: var(--mantine-spacing-md);
+  padding-left: var(--mantine-spacing-md);
+}
+
+.iconContainer {
+  padding: var(--mantine-spacing-xs);
+  width: rem(44px);
+  height: rem(44px);
+  display: flex;
+  align-items: center;
+  transition: background-color 200ms ease;
+  border-radius: var(--mantine-radius-md);
+
+  background-color: --mantine-colors-blue-2;
+  color: var(--mantine-colors-blue-9);
+  @mixin dark {
+    background-color: --mantine-colors-blue-5;
+    color: var(--mantine-colors-blue-2);
+  }
+
+  &:hover {
+    background-color: --var(--mantine-colors-blue-3);
+    @mixin dark {
+      background-color: --var(--mantine-colors-blue-8);
+    }
+  }
+}
+
+.functionalButton {
+  background-color: var(--mantine-colors-gray-2);
+  color: var(--mantine-colors-gray-9);
+  @mixin dark {
+    color: var(--mantine-colors-white);
+    background-color: var(--mantine-colors-dark-4);
+  }
+  &:hover {
+    background-color: var(--mantine-colors-gray-3);
+    @mixin dark {
+      background-color: var(--mantine-colors-dark-3);
+    }
+  }
+  padding: var(--mantine-spacing-xs);
+  width: rem(38px);
+  height: rem(38px);
+  display: flex;
+  align-items: center;
+  transition: background-color 200ms ease;
+  border-radius: var(--mantine-radius-xl);
+}

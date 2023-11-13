@@ -1,9 +1,7 @@
-import { createGetInitialProps } from "@mantine/next";
+import { ColorSchemeScript } from "@mantine/core";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
 export default class _Document extends Document {
-  static getInitialProps = createGetInitialProps();
-
   render() {
     return (
       <Html>
@@ -31,6 +29,8 @@ export default class _Document extends Document {
             sizes="152x152"
             href="/icons/icon-152x152.png"
           />
+
+          <ColorSchemeScript defaultColorScheme="auto" />
         </Head>
         <body>
           <Main />
