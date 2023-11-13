@@ -1,37 +1,35 @@
 .timeTextMarker {
   line-height: 0;
   user-select: none;
-  font-size: 12;
+  font-size: rem(12px);
   color: var(--mantine-color-gray-5);
   @mixin dark {
     color: var(--mantine-color-dark-3);
   }
 }
 
-/* const useStyles = createStyles((theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    flex: 1,
-  },
-  cellHeader: {
-    top: 120,
-    width: "100%",
-  },
-  cellHeaderItem: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  scrollInner: {
-    width: "100%",
-    display: "flex",
-    height: 300,
-  },
-})); */
-
 .container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+}
+
+.cellHeader {
+  top: 120;
+  width: 100%;
+}
+
+.cellHeaderItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scrollInner {
+  width: 100%;
+  display: flex;
+  height: 300px;
 }
 
 .cellHeaderItemText {

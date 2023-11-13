@@ -21,7 +21,7 @@ const CurrentTimeMarker: FC = () => {
   return (
     <Box
       ref={markerRef}
-      sx={{
+      style={{
         top,
         display: "flex",
         alignItems: "center",
@@ -33,14 +33,14 @@ const CurrentTimeMarker: FC = () => {
       }}
     >
       <Text
-        sx={{
+        style={{
           fontSize: 12,
         }}
       >
         {format(currentDate, "HH:mm")}
       </Text>
       <Box
-        sx={{
+        style={{
           marginLeft: 7,
           width: "1200px",
           height: 1.5,

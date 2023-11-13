@@ -1,11 +1,8 @@
 import { Box, Grid, Text } from "@mantine/core";
-import { FC, use, useContext, useEffect, useState } from "react";
+import { FC } from "react";
 import EventItem from "./EventItem";
 import { TimeSlot } from "../../lib/models";
 import { useAtom } from "jotai";
-import { v4 } from "uuid";
-
-import useTraceUpdate from "../../hooks/useTraceUpdate";
 
 import bookableMachineAtom from "../../store/bookableMachineStore";
 import { COL_HEIGHT } from "../../config";

@@ -1,6 +1,6 @@
 .cell {
-  border: 1px solid var(--mantine-colors-gray-1);
+  border: 1px solid var(--mantine-color-gray-1);
   @mixin dark {
-    border-color: var(--mantine-colors-dark-6);
+    border-color: var(--mantine-color-dark-6);
   }
 }
