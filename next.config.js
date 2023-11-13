@@ -1,4 +1,8 @@
-module.exports = {
+const withPWA = require("next-pwa")({
+  dest: "public",
+});
+
+module.exports = withPWA({
   reactStrictMode: true,
   transpilePackages: [
     "ui",
@@ -6,4 +10,4 @@ module.exports = {
     "@douyinfe/semi-icons",
     "@douyinfe/semi-illustrations",
   ],
-};
+});
