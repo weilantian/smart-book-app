@@ -1,4 +1,4 @@
-import { Box, createStyles } from "@mantine/core";
+import { Box } from "@mantine/core";
 import { useAtom } from "jotai";
 import { FC, useEffect, useMemo } from "react";
 import eventManagerStore from "../../store/eventManagerStore";
@@ -7,35 +7,12 @@ import { COL_HEIGHT } from "../../config";
 import SlotEditPopup from "../Slots/SlotEditPopup";
 import { Text } from "@mantine/core";
 
-const useStyles = createStyles((theme) => ({
-  container: {
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.blue[0]
-        : theme.colors.blue[9],
-    display: "flex",
-    position: "absolute",
-    width: "100%",
-    borderRadius: theme.radius.md,
-    transition: "all 80ms ease",
-    userSelect: "none",
-    top: 0,
-    border:
-      theme.colorScheme === "dark"
-        ? `1px solid ${theme.fn.darken(theme.colors.blue[7], 0.5)}`
-        : `1px solid ${theme.colors.gray[0]}`,
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.fn.darken(theme.colors.blue[9], 0.5)
-        : theme.colors.blue[1],
-  },
-}));
+import classes from "./EventItem.module.css";
 
 const EventItem: FC<{
   slot: TimeSlot;
 }> = ({ slot }) => {
   const [evManager] = useAtom(eventManagerStore);
-  const { classes, cx } = useStyles();
 
   const top = useMemo(() => {
     const hour = slot.startTime.getHours();
@@ -60,7 +37,7 @@ const EventItem: FC<{
           height,
           userSelect: "none",
         }}
-        className={cx(classes.container)}
+        className={classes.container}
       >
         <Text truncate> {slot.name}</Text>
       </Box>

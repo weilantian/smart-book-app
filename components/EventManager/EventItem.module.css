@@ -1,0 +1,26 @@
+/* const useStyles = createStyles((theme) => ({
+  container: {
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.blue[0]
+        : theme.colors.blue[9],
+    display: "flex",
+    position: "absolute",
+    width: "100%",
+    borderRadius: theme.radius.md,
+    transition: "all 80ms ease",
+    userSelect: "none",
+    top: 0,
+    border:
+      theme.colorScheme === "dark"
+        ? `1px solid ${theme.fn.darken(theme.colors.blue[7], 0.5)}`
+        : `1px solid ${theme.colors.gray[0]}`,
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.fn.darken(theme.colors.blue[9], 0.5)
+        : theme.colors.blue[1],
+  },
+})); */
+
+.container {
+}

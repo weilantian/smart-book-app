@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  createStyles,
-  Flex,
-  Grid,
-  Group,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Box, Button, Grid, Group, Stack, Text } from "@mantine/core";
 import CalenderRow from "./CalenderRow";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import {
@@ -28,6 +19,8 @@ import useTraceUpdate from "../../hooks/useTraceUpdate";
 import CurrentTimeMarker from "../CurrentTimeMarker";
 import { COL_HEIGHT } from "../../config";
 
+import classes from "./EventManager.module.css";
+
 const DayLabel: FC<{ i: number }> = ({ i }) => {
   const text = useRef<HTMLDivElement>(null);
 
@@ -35,55 +28,17 @@ const DayLabel: FC<{ i: number }> = ({ i }) => {
     if (i == 9) text.current?.scrollIntoView({});
   }, [i]);
   return (
-    <Text
-      ref={text}
-      key={i}
-      sx={(theme) => ({
-        lineHeight: 0,
-        userSelect: "none",
-        fontSize: 12,
-        color:
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[3]
-            : theme.colors.gray[5],
-      })}
-      align="end"
-    >
+    <Text ref={text} key={i} className={classes.timeTextMarker} ta="center">
       {i}:00
     </Text>
   );
 };
-
-const useStyles = createStyles((theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    flex: 1,
-  },
-  cellHeader: {
-    top: 120,
-    width: "100%",
-  },
-  cellHeaderItem: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  scrollInner: {
-    width: "100%",
-    display: "flex",
-    height: 300,
-  },
-}));
 
 const EventManager: FC<{
   slots: Array<TimeSlot>;
   selectedDate: Date | null;
   setDate: (date: Date | null) => void;
 }> = ({ selectedDate, setDate, slots }) => {
-  const { classes, cx } = useStyles();
-
   //Get each day of the week of the selected date
   const currentWeek = useMemo(
     () =>
@@ -117,11 +72,11 @@ const EventManager: FC<{
   return (
     <Box className={classes.container}>
       <Group
-        spacing="xs"
-        sx={{
+        gap="xs"
+        style={{
           marginBottom: 18,
         }}
-        position="right"
+        justify="right"
       >
         <Button
           size="xs"
@@ -153,12 +108,12 @@ const EventManager: FC<{
       </Group>
 
       <Stack
-        sx={{
+        style={{
           flex: 1,
         }}
       >
         <Box
-          sx={{
+          style={{
             marginLeft: 60,
           }}
         >
@@ -170,14 +125,7 @@ const EventManager: FC<{
               return (
                 <Grid.Col key={date.toString()} span={1}>
                   <Box className={classes.cellHeaderItem}>
-                    <Text
-                      sx={(theme) => ({
-                        color:
-                          theme.colorScheme === "dark"
-                            ? theme.colors.dark[3]
-                            : theme.colors.gray[5],
-                      })}
-                    >
+                    <Text className={classes.cellHeaderItemText}>
                       {date.toLocaleString("en-US", { weekday: "short" })}
                     </Text>
                     <DayIndicator day={day} highlighted={isToday} />
@@ -188,7 +136,7 @@ const EventManager: FC<{
           </Grid>
         </Box>
         <Box
-          sx={{
+          style={{
             flex: 1,
             overflowY: "scroll",
             overflowX: "hidden",
@@ -198,8 +146,8 @@ const EventManager: FC<{
         >
           <Box className={classes.scrollInner}>
             <Stack
-              spacing={COL_HEIGHT}
-              sx={{
+              gap={COL_HEIGHT}
+              style={{
                 paddingRight: 14,
                 paddingTop: 14,
               }}
@@ -211,7 +159,7 @@ const EventManager: FC<{
                 ))}
             </Stack>
             <Box
-              sx={{
+              style={{
                 flex: 1,
                 paddingTop: 20,
                 position: "relative",

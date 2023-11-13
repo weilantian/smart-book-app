@@ -1,4 +1,4 @@
-import { Box, createStyles, Grid, Text } from "@mantine/core";
+import { Box, Grid, Text } from "@mantine/core";
 import { FC, use, useContext, useEffect, useState } from "react";
 import EventItem from "./EventItem";
 import { TimeSlot } from "../../lib/models";
@@ -11,25 +11,15 @@ import bookableMachineAtom from "../../store/bookableMachineStore";
 import { COL_HEIGHT } from "../../config";
 import eventManagerStore from "../../store/eventManagerStore";
 
-const useStyles = createStyles((theme) => ({
-  header: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-}));
+import classes from "./CalendarRow.module.css";
 
 const Cell = () => {
   return (
     <Box
-      sx={(theme) => ({
+      className={classes.cell}
+      style={{
         height: COL_HEIGHT,
-        border: `1px solid ${
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[6]
-            : theme.colors.gray[1]
-        }`,
-      })}
+      }}
     ></Box>
   );
 };
@@ -72,7 +62,7 @@ const CalendarRow: FC<{
           type: "MOUSE_UP",
         })
       }
-      sx={{
+      style={{
         padding: 0,
         position: "relative",
       }}

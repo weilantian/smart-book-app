@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Collapse,
-  createStyles,
   Divider,
   Group,
   Paper,
@@ -21,7 +20,7 @@ import {
   IconPlus,
   IconUser,
 } from "@tabler/icons-react";
-import { Calendar } from "@mantine/dates";
+import { Calendar, DatePicker } from "@mantine/dates";
 import EventManager from "@/components/EventManager";
 import { Bookable, TimeSlot } from "@/lib/models";
 import { useAtom } from "jotai";
@@ -34,57 +33,9 @@ import Head from "next/head";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import dayjs from "dayjs";
+import cx from "clsx";
 
-const useStyles = createStyles((theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[7]
-        : theme.colors.gray[0],
-    width: "100%",
-    height: "100vh",
-    boxSizing: "border-box",
-  },
-  inner: {
-    flex: 1,
-    gap: 14,
-    paddingTop: theme.spacing.sm,
-    paddingBottom: theme.spacing.md,
-    paddingLeft: theme.spacing.lg,
-    paddingRight: theme.spacing.lg,
-    display: "flex",
-    boxSizing: "border-box",
-
-    alignItems: "stretch",
-  },
-  paper: {
-    boxSizing: "border-box",
-    border: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]
-    }`,
-    padding: theme.spacing.md,
-    borderRadius: theme.radius.md,
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.white,
-  },
-  sideBar: {
-    gap: 0,
-    display: "flex",
-    flexDirection: "column",
-    width: 310,
-    boxSizing: "border-box",
-  },
-  main: {
-    flex: 1,
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    boxSizing: "border-box",
-  },
-}));
+import classes from "@/styles/IndexPage.module.css";
 
 const CreateBookablePage: NextPage = () => {
   const router = useRouter();
@@ -93,7 +44,7 @@ const CreateBookablePage: NextPage = () => {
     if (isAuthorized) return;
     router.push("/signin");
   }, [isAuthorized, router]);
-  const { classes, cx } = useStyles();
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(false);
 
@@ -149,7 +100,7 @@ const CreateBookablePage: NextPage = () => {
         home
         widgets={
           <Link href="/bookable/create">
-            <Button leftIcon={<IconPlus size={18} />} size="sm">
+            <Button leftSection={<IconPlus size={18} />} size="sm">
               New Booking
             </Button>
           </Link>
@@ -157,12 +108,11 @@ const CreateBookablePage: NextPage = () => {
       />
       <div className={classes.inner}>
         <Paper className={cx(classes.paper, classes.sideBar)}>
-          <Group spacing="xs" align="center">
+          <Group gap="xs" align="center">
             <IconCalendar />
             <Button
               onClick={() => setShowLandscapeCalendar((p) => !p)}
               size="xs"
-              compact
               variant="light"
             >
               {showLandscapeCalendar ? (
@@ -174,7 +124,7 @@ const CreateBookablePage: NextPage = () => {
           </Group>
           <Collapse in={showLandscapeCalendar}>
             <Box>
-              <Calendar
+              <DatePicker
                 onChange={setSelectedDate}
                 value={selectedDate}
                 size="sm"
@@ -183,7 +133,7 @@ const CreateBookablePage: NextPage = () => {
           </Collapse>
 
           <Box
-            sx={{
+            style={{
               flex: 1,
               flexDirection: "column",
               display: "flex",
