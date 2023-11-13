@@ -1,6 +1,10 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { MantineProvider } from "@mantine/core";
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from "@mantine/core";
 
 import { NextPage } from "next";
 import { ReactElement, ReactNode, useEffect } from "react";
@@ -14,6 +18,7 @@ import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
 import { Provider } from "jotai";
+import { useLocalStorage } from "@mantine/hooks";
 
 // if (typeof window !== "undefined") {
 //   inspect({
@@ -41,6 +46,14 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     body.setAttribute("theme-mode", "dark");
   }, []);
 
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: "smart-book-color-scheme",
+    defaultValue: "light",
+    getInitialValueInEffect: true,
+  });
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   return (
     <>
       <Head>
@@ -52,14 +65,25 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <Provider>
         <QueryClientProvider client={queryClient}>
-          <MantineProvider withGlobalStyles withNormalizeCSS>
-            <ModalsProvider>
-              <LocaleProvider locale={en_US}>
-                <RouterTransition />
-                {getLayout(<Component {...pageProps} />)}
-              </LocaleProvider>
-            </ModalsProvider>
-          </MantineProvider>
+          <ColorSchemeProvider
+            colorScheme={colorScheme}
+            toggleColorScheme={toggleColorScheme}
+          >
+            <MantineProvider
+              theme={{
+                colorScheme,
+              }}
+              withGlobalStyles
+              withNormalizeCSS
+            >
+              <ModalsProvider>
+                <LocaleProvider locale={en_US}>
+                  <RouterTransition />
+                  {getLayout(<Component {...pageProps} />)}
+                </LocaleProvider>
+              </ModalsProvider>
+            </MantineProvider>
+          </ColorSchemeProvider>
         </QueryClientProvider>
       </Provider>
     </>

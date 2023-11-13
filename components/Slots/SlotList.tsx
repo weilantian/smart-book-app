@@ -11,7 +11,7 @@ const useStyles = createStyles((theme) => ({
   cardWrapper: {
     backgroundColor:
       theme.colorScheme === "dark"
-        ? theme.colors.blue[3]
+        ? theme.fn.darken(theme.colors.blue[9], 0.5)
         : theme.colors.blue[0],
 
     paddingTop: theme.spacing.xs,
@@ -27,7 +27,10 @@ const useStyles = createStyles((theme) => ({
     alignItems: "center",
   },
   colouredText: {
-    color: theme.colors.blue[9],
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.blue[2]
+        : theme.colors.blue[9],
   },
 }));
 
@@ -48,7 +51,10 @@ const SlotListItem: FC<
         <Text
           sx={(theme) => ({
             marginLeft: "2px",
-            color: theme.colors.blue[8],
+            color:
+              theme.colorScheme === "dark"
+                ? theme.colors.blue[1]
+                : theme.colors.blue[8],
           })}
           fw={600}
           fz="sm"

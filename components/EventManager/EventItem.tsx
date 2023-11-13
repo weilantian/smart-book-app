@@ -22,11 +22,11 @@ const useStyles = createStyles((theme) => ({
     top: 0,
     border:
       theme.colorScheme === "dark"
-        ? `1px solid ${theme.colors.gray[7]}`
+        ? `1px solid ${theme.fn.darken(theme.colors.blue[7], 0.5)}`
         : `1px solid ${theme.colors.gray[0]}`,
     backgroundColor:
       theme.colorScheme === "dark"
-        ? theme.colors.blue[5]
+        ? theme.fn.darken(theme.colors.blue[9], 0.5)
         : theme.colors.blue[1],
   },
 }));

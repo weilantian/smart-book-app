@@ -26,7 +26,7 @@ const Cell = () => {
         height: COL_HEIGHT,
         border: `1px solid ${
           theme.colorScheme === "dark"
-            ? theme.colors.dark[4]
+            ? theme.colors.dark[6]
             : theme.colors.gray[1]
         }`,
       })}

@@ -8,13 +8,17 @@ import {
   UnstyledButton,
   Avatar,
   Menu,
+  useMantineColorScheme,
+  ActionIcon,
 } from "@mantine/core";
 import {
   IconCalendarEvent,
   IconDots,
   IconEdit,
+  IconMoonStars,
   IconSettings,
   IconShare,
+  IconSun,
 } from "@tabler/icons-react";
 
 import Link from "next/link";
@@ -115,11 +119,27 @@ const EventPageHeader: FC<{
         </UnstyledButton>
       </Group>
       <Group spacing="sm">
-        {" "}
         <UserWidget />
+        <LightDarkModeSwitcher />
         {widgets}
       </Group>
     </Group>
+  );
+};
+
+const LightDarkModeSwitcher = () => {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
+
+  return (
+    <ActionIcon
+      variant="outline"
+      color="blue"
+      onClick={() => toggleColorScheme()}
+      title="Toggle color scheme"
+    >
+      {dark ? <IconSun size="1.1rem" /> : <IconMoonStars size="1.1rem" />}
+    </ActionIcon>
   );
 };
 

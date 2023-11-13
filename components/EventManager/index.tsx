@@ -41,6 +41,7 @@ const DayLabel: FC<{ i: number }> = ({ i }) => {
       sx={(theme) => ({
         lineHeight: 0,
         userSelect: "none",
+        fontSize: 12,
         color:
           theme.colorScheme === "dark"
             ? theme.colors.dark[3]

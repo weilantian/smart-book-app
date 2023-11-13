@@ -65,7 +65,7 @@ const SlotEditPopup: FC<PropsWithChildren<{ slot: TimeSlot }>> = ({
                 sx={(theme) => ({ color: theme.colors.gray[5] })}
                 spacing={5}
               >
-                {item.icon} <Text color="black">{item.value}</Text>
+                {item.icon} <Text>{item.value}</Text>
               </Group>
             ))}
         </Box>

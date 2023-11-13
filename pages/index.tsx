@@ -98,13 +98,17 @@ const CreateBookablePage: NextPage = () => {
   const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(false);
 
   const startEndOfCurrentWeek = useMemo(() => {
+    const targeStartDate = dayjs(selectedDate ?? new Date())
+      .startOf("week")
+      .toDate();
+    const targetEndDate = dayjs(selectedDate ?? new Date())
+      .endOf("week")
+      .toDate();
+    targeStartDate.setDate(targeStartDate.getDate() - 7);
+    targetEndDate.setDate(targetEndDate.getDate() + 7);
     return {
-      startDate: dayjs(selectedDate ?? new Date())
-        .startOf("week")
-        .toDate(),
-      endDate: dayjs(selectedDate ?? new Date())
-        .endOf("week")
-        .toDate(),
+      startDate: targeStartDate,
+      endDate: targetEndDate,
     };
   }, [selectedDate]);
 
