@@ -1,12 +1,14 @@
 .cardWrapper {
   background-color: var(--mantine-color-blue-0);
   @mixin dark {
-    background-color: darken(var(--mantine-color-blue-9), 0.5);
+    background-color: rgb(12, 50, 86);
   }
   padding-top: var(--mantine-spacing-xs);
   padding-bottom: var(--mantine-spacing-xs);
   padding-left: var(--mantine-spacing-sm);
   padding-right: var(--mantine-spacing-sm);
+
+  border-radius: var(--mantine-radius-sm);
 }
 
 .container {

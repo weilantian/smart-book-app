@@ -48,21 +48,22 @@ const BookableInfoForm: FC<{
         });
       })}
     >
-      <Stack spacing={8}>
+      <Stack gap={8}>
         <TextInput
-          icon={<IconHeading />}
+          leftSection={<IconHeading />}
           label="Name"
           placeholder="Daily Standup"
           {...form.getInputProps("name")}
         />
         <TextInput
-          icon={<IconLocation />}
+          leftSection={<IconLocation />}
           label="Location"
           placeholder="Location"
           {...form.getInputProps("location")}
         />
         <Textarea
           placeholder="Description"
+          autosize
           minRows={4}
           label="Description"
           {...form.getInputProps("description")}
@@ -98,7 +99,7 @@ const BookableInfoForm: FC<{
           {...form.getInputProps("type")}
         />
         <Button
-          sx={{
+          style={{
             marginTop: 8,
           }}
           type="submit"

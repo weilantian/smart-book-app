@@ -36,10 +36,10 @@
   top: 0;
   border: 1px solid var(--mantine-color-blue-2);
   @mixin dark {
-    border: 1px solid var(--mantine-color-blue-outline);
+    border: 1px solid rgb(14, 63, 107);
   }
   background-color: var(--mantine-color-blue-1);
   @mixin dark {
-    background-color: var(--mantine-color-blue-light);
+    background-color: rgb(12, 50, 86);
   }
 }
