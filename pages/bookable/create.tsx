@@ -18,7 +18,7 @@ import {
   IconChevronDown,
   IconChevronRight,
 } from "@tabler/icons-react";
-import { Calendar, DatePicker } from "@mantine/dates";
+import { DatePicker } from "@mantine/dates";
 import EventManager from "@/components/EventManager";
 import { Bookable, TimeSlot } from "@/lib/models";
 import { useAtom } from "jotai";
@@ -30,8 +30,21 @@ import { createBookable } from "@/lib/endpoint";
 import Head from "next/head";
 
 import classes from "@/styles/IndexPage.module.css";
+import { useDisclosure } from "@mantine/hooks";
+import CreateBookableSuccessfulModal from "@/components/Modal/CreateBookableSuccessfulModal";
+import { useMutation } from "@tanstack/react-query";
 
 const CreateBookablePage: NextPage = () => {
+  const [createdBookable, setCreatedBookable] = useState<Bookable | null>(null);
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: createBookable,
+    onSuccess({ data }) {
+      setCreatedBookable(data);
+    },
+  });
+
   const router = useRouter();
   const { isAuthorized } = useIsAuthorized();
   useEffect(() => {
@@ -55,8 +68,22 @@ const CreateBookablePage: NextPage = () => {
     setSlotsForRender([...state.context.slots]);
   }, [state, state.context.slots]);
 
+  useEffect(() => {
+    if (createdBookable) {
+      open();
+    }
+  }, [createdBookable, open]);
+
   return (
     <div className={classes.container}>
+      <CreateBookableSuccessfulModal
+        bookable={createdBookable}
+        opened={opened}
+        onClose={() => {
+          close();
+          router.push("/");
+        }}
+      />
       <Head>
         <title>Create a new booking - Smart Book</title>
       </Head>
@@ -127,8 +154,9 @@ const CreateBookablePage: NextPage = () => {
                 <SlotList slots={slotsForRender} />
                 <Divider my="sm" />
                 <BookableInfoForm
+                  isLoading={isLoading}
                   onSubmit={(data) => {
-                    createBookable({
+                    mutate({
                       ...data,
 
                       availableSlots: state.context.slots.map((slot) => {
@@ -137,9 +165,7 @@ const CreateBookablePage: NextPage = () => {
                           endTime: slot.endTime,
                         };
                       }),
-                    } as Bookable).then((response) =>
-                      console.log(response.data)
-                    );
+                    } as Bookable);
                   }}
                 />
               </Box>

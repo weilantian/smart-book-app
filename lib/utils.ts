@@ -59,3 +59,7 @@ export const computeDurationText = (duration: number) => {
   if (minutes % 60 === 0) return `${hours} h`;
   return `${hours} h ${minutes % 60} min`;
 };
+
+export const computeBookableShareableLink = (id: string) => {
+  return `${window.location.origin}/book/${id}`;
+};

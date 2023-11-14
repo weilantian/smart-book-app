@@ -27,7 +27,8 @@ interface BookableInfoFormValues {
 
 const BookableInfoForm: FC<{
   onSubmit: (data: Partial<Bookable>) => void;
-}> = ({ onSubmit }) => {
+  isLoading?: boolean;
+}> = ({ onSubmit, isLoading }) => {
   const form = useForm<BookableInfoFormValues>({
     initialValues: {
       name: "",
@@ -99,6 +100,7 @@ const BookableInfoForm: FC<{
           {...form.getInputProps("type")}
         />
         <Button
+          loading={isLoading}
           style={{
             marginTop: 8,
           }}
