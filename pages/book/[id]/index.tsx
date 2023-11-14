@@ -4,7 +4,6 @@ import { computeDurationText } from "@/lib/utils";
 import {
   Box,
   Title,
-  createStyles,
   Text,
   Group,
   UnstyledButton,
@@ -13,51 +12,14 @@ import {
   TextInput,
   Button,
 } from "@mantine/core";
-import { Calendar } from "@mantine/dates";
+import { DatePicker, DateValue } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
 import { GetServerSideProps, NextPage } from "next";
 import { FC, useMemo, useState } from "react";
 import { z } from "zod";
 
-const useStyles = createStyles((theme) => ({
-  wrapper: {
-    width: "100%",
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[7]
-        : theme.colors.gray[0],
-    height: "100vh",
-    paddingTop: 80,
-  },
-  container: {
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[6] : "#fff",
-    margin: "0 auto",
-    border: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[3]
-    }`,
-    boxShadow: theme.shadows.md,
-    padding: theme.spacing.md,
-    borderRadius: theme.radius.md,
-    width: "fit-content",
-    display: "flex",
-    justifyContent: "center",
-    height: 400,
-  },
-  block: {
-    minWidth: 400,
-    maxWidth: 400,
-  },
-  slotItem: {
-    paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-    textAlign: "center",
-    border: `1px solid ${theme.colors.blue[3]}`,
-    color: theme.colors.blue[7],
-    borderRadius: theme.radius.md,
-  },
-}));
+import classes from "@/styles/BookPage.module.css";
 
 const BasicInfoBlock: FC<{
   bookable: BookingDetail;
@@ -67,31 +29,30 @@ const BasicInfoBlock: FC<{
   } | null;
   resetSelectedSlot?: () => void;
 }> = ({ bookable, selectedSlot, resetSelectedSlot }) => {
-  const { classes } = useStyles();
   return (
     <Box
-      sx={{
+      style={{
         paddingTop: 16,
         paddingLeft: 16,
       }}
       className={classes.block}
     >
       <Title order={3}>{bookable.name}</Title>
-      <Text color="gray">{bookable.description}</Text>
-      <Group sx={{ marginTop: 8 }} spacing={6}>
+      <Text>{bookable.description}</Text>
+      <Group style={{ marginTop: 8 }} gap={6}>
         <IconClock color="gray" />
-        <Text color="gray">{computeDurationText(bookable.duration)}</Text>
+        <Text>{computeDurationText(bookable.duration)}</Text>
       </Group>
       {selectedSlot && (
         <UnstyledButton onClick={resetSelectedSlot}>
           <Group
-            sx={(theme) => ({
+            style={{
               marginTop: 8,
-              color: theme.colors.blue[7],
+              color: "var(--mantine-color-blue-7)",
               cursor: "pointer",
               fontWeight: 500,
-            })}
-            spacing={6}
+            }}
+            gap={6}
           >
             <IconCalendar />
             <Text>
@@ -128,10 +89,10 @@ const AttendeeFormBlock: FC<{
         value.length ? null : "Please enter your last name",
     },
   });
-  const { classes } = useStyles();
+
   return (
     <Box
-      sx={{
+      style={{
         paddingLeft: 16,
         paddingRight: 16,
         paddingTop: 16,
@@ -170,27 +131,25 @@ const AttendeeFormBlock: FC<{
 const CalendarBlock: FC<{
   availableDates: Date[];
   date?: Date | null;
-  setDate: (date: Date) => void;
+  setDate: (date: DateValue) => void;
 }> = ({ date, setDate, availableDates }) => {
-  const { classes } = useStyles();
-
   return (
     <Box
-      sx={{
+      style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
       }}
       className={classes.block}
     >
-      <Calendar
+      <DatePicker
         renderDay={(date) => {
           const day = date.getDate();
           const isAvailable =
             availableDates?.find((d) => d.getDate() === date.getDate()) !==
             undefined;
           return isAvailable ? (
-            <Indicator size={6} color="green" offset={8}>
+            <Indicator size={6} color="green" offset={-4}>
               {day}
             </Indicator>
           ) : (
@@ -209,7 +168,6 @@ const SlotItem: FC<{ slot: Slot; onClick: (slot: Slot) => void }> = ({
   slot,
   onClick,
 }) => {
-  const { classes } = useStyles();
   return (
     <UnstyledButton onClick={() => onClick(slot)} className={classes.slotItem}>
       {slot.start.toLocaleTimeString()} - {slot.end.toLocaleTimeString()}
@@ -222,10 +180,9 @@ const SlotsBlock: FC<{
   slots: Array<Slot>;
   onSelectSlot: (slot: Slot) => void;
 }> = ({ title, slots, onSelectSlot }) => {
-  const { classes } = useStyles();
   return (
     <Box
-      sx={{
+      style={{
         display: "flex",
         flexDirection: "column",
       }}
@@ -233,7 +190,7 @@ const SlotsBlock: FC<{
     >
       <Title order={4}>{title}</Title>
       <Box
-        sx={{
+        style={{
           marginTop: 12,
           height: "100%",
           overflowY: "scroll",
@@ -252,7 +209,7 @@ const SlotsBlock: FC<{
         ) : (
           <Box>
             <Text
-              sx={{
+              style={{
                 width: "70%",
                 color: "gray",
               }}
@@ -267,7 +224,6 @@ const SlotsBlock: FC<{
 };
 
 const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
-  const { classes } = useStyles();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<{
     start: Date;

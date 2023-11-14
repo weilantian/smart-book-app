@@ -78,7 +78,12 @@ const CreateBookablePage: NextPage = () => {
             </Button>
           </Group>
           <Collapse in={showLandscapeCalendar}>
-            <Box>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <DatePicker
                 onChange={setSelectedDate}
                 value={selectedDate}

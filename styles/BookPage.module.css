@@ -1,0 +1,38 @@
+.wrapper {
+  width: 100%;
+  background-color: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-6)
+  );
+  height: 100vh;
+  padding-top: 80px;
+}
+
+.container {
+  background-color: light-dark(#ffffff, var(--mantine-color-dark-7));
+  margin: 0 auto;
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  box-shadow: var(--mantine-shadow-md);
+  padding: var(--mantine-spacing-md);
+  border-radius: var(--mantine-radius-md);
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  height: 400px;
+}
+
+.block {
+  min-width: 400px;
+  max-width: 400px;
+}
+
+.slotItem {
+  padding-top: var(--mantine-spacing-md);
+  padding-bottom: var(--mantine-spacing-md);
+  text-align: center;
+  border: 1px solid
+    light-dark(var(--mantine-color-blue-5), var(--mantine-color-blue-7));
+  color: light-dark(var(--mantine-color-blue-5), var(--mantine-color-blue-7));
+  border-radius: var(--mantine-radius-md);
+}
