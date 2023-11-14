@@ -13,10 +13,10 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import { Props } from "@react-three/drei";
+
 import { IconCircleCheck } from "@tabler/icons-react";
 import { useRouter } from "next/router";
-import { ComponentProps, FC, useMemo } from "react";
+import { ComponentProps, FC } from "react";
 
 const CreateBookableSuccessfulModal: FC<
   ComponentProps<typeof Modal> & {
