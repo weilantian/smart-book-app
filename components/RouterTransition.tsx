@@ -33,7 +33,7 @@ const RouterTransition: FC = () => {
       router.events.off("routeChangeError", handleComplete);
     };
   }, [router.asPath, router.events, send]);
-  return <NavigationProgress autoReset={true} />;
+  return <NavigationProgress />;
 };
 
 export default RouterTransition;

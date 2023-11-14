@@ -30,7 +30,7 @@ const CreateEventModal: FC<ComponentProps<typeof Modal>> = ({
           placeholder="Event Name"
         />
 
-        <Group position="apart">
+        <Group justify="space-between">
           <span />
           <Button onClick={() => mutate(eventName)} loading={isLoading}>
             Create

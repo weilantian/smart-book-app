@@ -28,7 +28,9 @@ const SlotEditPopup: FC<PropsWithChildren<{ slot: TimeSlot }>> = ({
     <Popover
       opened={eventManager.slotEditing === slot.id}
       withinPortal
-      transition="pop"
+      transitionProps={{
+        transition: "pop",
+      }}
       position="right-start"
       shadow="md"
       width={400}
@@ -38,8 +40,8 @@ const SlotEditPopup: FC<PropsWithChildren<{ slot: TimeSlot }>> = ({
       <Popover.Dropdown>
         <Box>
           <Title order={4}>{slot.name}</Title>
-          <Badge mt={4} size="lg">
-            <Group spacing={4}>
+          <Badge variant="light" mt={4} size="lg">
+            <Group gap={4}>
               <IconClock size={12} />
               {slot.startTime.toLocaleDateString("en-AU", {
                 year: "numeric",
@@ -52,7 +54,7 @@ const SlotEditPopup: FC<PropsWithChildren<{ slot: TimeSlot }>> = ({
           </Badge>
 
           <Divider
-            sx={{
+            style={{
               marginTop: 12,
               marginBottom: 12,
             }}
@@ -62,8 +64,8 @@ const SlotEditPopup: FC<PropsWithChildren<{ slot: TimeSlot }>> = ({
             slot.slotDetail.map((item) => (
               <Group
                 mt={4}
-                sx={(theme) => ({ color: theme.colors.gray[5] })}
-                spacing={5}
+                style={{ color: "var(--mantine-color-gray-5" }}
+                gap={5}
               >
                 {item.icon} <Text>{item.value}</Text>
               </Group>

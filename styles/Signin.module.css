@@ -1,0 +1,14 @@
+.page {
+  background-color: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark)
+  );
+  height: 100vh;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

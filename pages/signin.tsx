@@ -1,6 +1,5 @@
 import {
   Button,
-  createStyles,
   Input,
   Paper,
   Stack,
@@ -17,23 +16,11 @@ import { useMutation } from "@tanstack/react-query";
 import { login, signup, updateToken } from "../lib/endpoint";
 import { useRouter } from "next/router";
 
-const useStyles = createStyles((theme) => ({
-  page: {
-    background:
-      theme.colorScheme === "dark" ? theme.colors.dark : theme.colors.gray[1],
-    height: "100vh",
-  },
-  inner: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-}));
+import classes from "@/styles/Signin.module.css";
 
 const LoginPage: NextPage = () => {
   const [type, toggle] = useToggle(["login", "register"]);
-  const { classes } = useStyles();
+
   const router = useRouter();
   const { mutate, isLoading } = useMutation({
     mutationFn: type == "register" ? signup : login,
@@ -68,7 +55,7 @@ const LoginPage: NextPage = () => {
       <div className={classes.inner}>
         <h1>SmartBook</h1>
         <Paper
-          sx={{
+          style={{
             margin: "auto",
             width: 420,
           }}
@@ -144,7 +131,7 @@ const LoginPage: NextPage = () => {
                 error={form.errors.terms}
                 label="I accept terms and conditions"
               />
-              <Group position="apart" mt="xl">
+              <Group justify="space-between" mt="xl">
                 <Anchor
                   component="button"
                   type="button"
