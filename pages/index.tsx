@@ -147,6 +147,7 @@ const CreateBookablePage: NextPage = () => {
               flex: 1,
               flexDirection: "column",
               display: "flex",
+              scrollbarGutter: "stable",
             }}
           >
             <BookableList />

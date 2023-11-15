@@ -1,6 +1,7 @@
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/nprogress/styles.css";
+import "@mantine/notifications/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
@@ -19,6 +20,7 @@ import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
 import { Provider } from "jotai";
 import { useLocalStorage } from "@mantine/hooks";
+import { Notifications } from "@mantine/notifications";
 
 // if (typeof window !== "undefined") {
 //   inspect({
@@ -60,6 +62,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <Provider>
         <QueryClientProvider client={queryClient}>
           <MantineProvider theme={theme}>
+            <Notifications />
             <ModalsProvider>
               <LocaleProvider locale={en_US}>
                 <RouterTransition />
