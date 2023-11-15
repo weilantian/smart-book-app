@@ -8,6 +8,8 @@
   width: 100%;
   border-radius: var(--mantine-radius-md);
 
+  padding-left: var(--mantine-spacing-xs);
+
   user-select: none;
   top: 0;
   border: 1px solid var(--mantine-color-blue-2);

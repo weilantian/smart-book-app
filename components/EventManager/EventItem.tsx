@@ -81,7 +81,10 @@ const EventItem: FC<{
           evManager.slotIdFocused === slot.id && classes.active
         )}
       >
-        <Text truncate> {slot.name}</Text>
+        <Text size="sm" truncate>
+          {" "}
+          {slot.name}
+        </Text>
       </Box>
     </SlotEditPopup>
   );
