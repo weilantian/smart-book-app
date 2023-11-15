@@ -1,7 +1,12 @@
-import { Box, Group, Text, Flex } from "@mantine/core";
+import { Box, Group, Text, Flex, Alert } from "@mantine/core";
 import { FC, PropsWithChildren, ReactElement } from "react";
 import { TimeSlot } from "../../lib/models";
-import { IconCalculator, IconCalendar, IconClock } from "@tabler/icons-react";
+import {
+  IconCalculator,
+  IconCalendar,
+  IconClock,
+  IconInfoCircle,
+} from "@tabler/icons-react";
 import { format } from "date-fns";
 import SlotEditPopup from "./SlotEditPopup";
 import { useAtom } from "jotai";
@@ -54,7 +59,7 @@ const SlotListCard: FC<{ slot: TimeSlot }> = ({ slot }) => {
         icon={<IconCalendar className={classes.colouredText} size={18} />}
         title="Date"
       >
-        {format(slot.startTime, "yyyy-mm-dd")}
+        {format(slot.startTime, "yyyy-M-dd")}
       </SlotListItem>
       <SlotListItem
         icon={<IconClock className={classes.colouredText} size={18} />}
@@ -73,6 +78,14 @@ const SlotListCard: FC<{ slot: TimeSlot }> = ({ slot }) => {
 };
 
 const SlotList: FC<{ slots: Array<TimeSlot> }> = ({ slots }) => {
+  if (slots.length === 0) {
+    return (
+      <Alert variant="light" color="blue" title="Block out available slots">
+        Select available slot on the calendar
+      </Alert>
+    );
+  }
+
   return (
     <Box
       style={{

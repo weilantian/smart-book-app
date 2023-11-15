@@ -30,7 +30,7 @@ import { createBookable } from "@/lib/endpoint";
 import Head from "next/head";
 
 import classes from "@/styles/IndexPage.module.css";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useHotkeys } from "@mantine/hooks";
 import CreateBookableSuccessfulModal from "@/components/Modal/CreateBookableSuccessfulModal";
 import { useMutation } from "@tanstack/react-query";
 
@@ -53,6 +53,7 @@ const CreateBookablePage: NextPage = () => {
   }, [isAuthorized, router]);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+
   const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(false);
 
   const [state, send] = useAtom(bookableMachineAtom);
@@ -61,7 +62,8 @@ const CreateBookablePage: NextPage = () => {
 
   //TODO: May use useMemo, however nextjs throw a hydration error when using useMemo due to client server time difference
   useEffect(() => {
-    if (!state.matches("creatingBookable.idle")) {
+    if (!state.matches("creatingBookable.idle") && state.context.newSlot.id) {
+      console.log(state.context.newSlot.id);
       setSlotsForRender([...state.context.slots, state.context.newSlot]);
       return;
     }

@@ -20,7 +20,7 @@ import {
 import classes from "./EventPageHedaer.module.css";
 
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 const UserWidget: FC = () => {
@@ -83,7 +83,10 @@ const EventPageHeader: FC<{
 
 const LightDarkModeSwitcher = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => setIsDark(colorScheme === "dark"), [colorScheme]);
 
   return (
     <ActionIcon
@@ -92,7 +95,7 @@ const LightDarkModeSwitcher = () => {
       onClick={() => toggleColorScheme()}
       title="Toggle color scheme"
     >
-      {dark ? <IconSun size="1.1rem" /> : <IconMoonStars size="1.1rem" />}
+      {isDark ? <IconSun size="1.1rem" /> : <IconMoonStars size="1.1rem" />}
     </ActionIcon>
   );
 };

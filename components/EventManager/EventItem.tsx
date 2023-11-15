@@ -1,6 +1,6 @@
 import { Box } from "@mantine/core";
 import { useAtom } from "jotai";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import eventManagerStore from "../../store/eventManagerStore";
 import { TimeSlot } from "../../lib/models";
 import { COL_HEIGHT } from "../../config";
@@ -9,11 +9,13 @@ import { Text } from "@mantine/core";
 
 import classes from "./EventItem.module.css";
 import bookableMachineAtom from "@/store/bookableMachineStore";
+import cx from "clsx";
 
 const EventItem: FC<{
   slot: TimeSlot;
 }> = ({ slot }) => {
-  const [evManager] = useAtom(eventManagerStore);
+  const [evManager, setEvManager] = useAtom(eventManagerStore);
+  useEffect(() => console.log(evManager), [evManager]);
 
   const top = useMemo(() => {
     const hour = slot.startTime.getHours();
@@ -35,25 +37,49 @@ const EventItem: FC<{
 
   const [, send] = useAtom(bookableMachineAtom);
 
+  const [cursorState, setCursorState] = useState<
+    "startDate" | "endDate" | "move"
+  >("move");
+
   return (
     <SlotEditPopup slot={slot}>
       <Box
-        onClick={() => (evManager.slotEditing = slot.id!)}
+        onDoubleClick={() =>
+          setEvManager((p) => ({ ...p, slotEditing: slot.id! }))
+        }
+        onMouseMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const relativePos = e.clientY - rect.top;
+          if (relativePos < 10) {
+            setCursorState("startDate");
+          } else if (relativePos > rect.height - 10) {
+            setCursorState("endDate");
+          } else {
+            setCursorState("move");
+          }
+        }}
+        // onClick={() => setEvManager((p) => ({ ...p, slotEditing: slot.id! }))}
+        onMouseUp={() => {}}
         onMouseDown={(e) => {
-          e.stopPropagation();
-          //TODO: React to dragging different borders
+          setEvManager((p) => ({ ...p, slotIdFocused: slot.id! }));
           send({
             type: "EDIT",
             slotId: slot.id!,
             pos: computeRelativePos(e),
+            editingMode: cursorState,
+            date: slot.startTime,
           });
         }}
         style={{
           top,
           height,
           userSelect: "none",
+          cursor: cursorState === "move" ? "grab" : "ns-resize",
         }}
-        className={classes.container}
+        className={cx(
+          classes.container,
+          evManager.slotIdFocused === slot.id && classes.active
+        )}
       >
         <Text truncate> {slot.name}</Text>
       </Box>

@@ -1,27 +1,3 @@
-/* const useStyles = createStyles((theme) => ({
-  container: {
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.blue[0]
-        : theme.colors.blue[9],
-    display: "flex",
-    position: "absolute",
-    width: "100%",
-    borderRadius: theme.radius.md,
-    transition: "all 80ms ease",
-    userSelect: "none",
-    top: 0,
-    border:
-      theme.colorScheme === "dark"
-        ? `1px solid ${theme.fn.darken(theme.colors.blue[7], 0.5)}`
-        : `1px solid ${theme.colors.gray[0]}`,
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.fn.darken(theme.colors.blue[9], 0.5)
-        : theme.colors.blue[1],
-  },
-})); */
-
 .container {
   color: var(--mantine-color-blue-9);
   @mixin dark {
@@ -31,7 +7,7 @@
   position: absolute;
   width: 100%;
   border-radius: var(--mantine-radius-md);
-  transition: all 80ms ease;
+
   user-select: none;
   top: 0;
   border: 1px solid var(--mantine-color-blue-2);
@@ -41,5 +17,12 @@
   background-color: var(--mantine-color-blue-1);
   @mixin dark {
     background-color: rgb(12, 50, 86);
+  }
+}
+
+.active {
+  background-color: var(--mantine-color-blue-2);
+  @mixin dark {
+    background-color: rgb(14, 63, 107);
   }
 }

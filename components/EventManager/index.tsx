@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 import DayIndicator from "./DayIndicator";
-import { useResizeObserver } from "@mantine/hooks";
+import { useHotkeys, useResizeObserver } from "@mantine/hooks";
 import { useAtom } from "jotai";
 import eventManagerStore from "../../store/eventManagerStore";
 import { TimeSlot } from "../../lib/models";
@@ -20,6 +20,8 @@ import CurrentTimeMarker from "../CurrentTimeMarker";
 import { COL_HEIGHT } from "../../config";
 
 import classes from "./EventManager.module.css";
+import bookableMachine from "@/state/bookableMachine";
+import bookableMachineAtom from "@/store/bookableMachineStore";
 
 const DayLabel: FC<{ i: number }> = ({ i }) => {
   const text = useRef<HTMLDivElement>(null);
@@ -39,6 +41,7 @@ const EventManager: FC<{
   selectedDate: Date | null;
   setDate: (date: Date | null) => void;
 }> = ({ selectedDate, setDate, slots }) => {
+  const [, send] = useAtom(bookableMachineAtom);
   //Get each day of the week of the selected date
   const currentWeek = useMemo(
     () =>
@@ -50,7 +53,7 @@ const EventManager: FC<{
     [selectedDate]
   );
 
-  const [, setEventManagerStore] = useAtom(eventManagerStore);
+  const [evManager, setEventManagerStore] = useAtom(eventManagerStore);
   const [gridRef, rect] = useResizeObserver();
 
   useEffect(() => {
@@ -68,6 +71,27 @@ const EventManager: FC<{
 
     [slots]
   );
+
+  useHotkeys([
+    [
+      "Delete",
+      () => {
+        send({
+          type: "DELETE",
+          slotId: evManager.slotIdFocused ?? "",
+        });
+      },
+    ],
+    [
+      "Backspace",
+      () => {
+        send({
+          type: "DELETE",
+          slotId: evManager.slotIdFocused ?? "",
+        });
+      },
+    ],
+  ]);
 
   return (
     <Box className={classes.container}>

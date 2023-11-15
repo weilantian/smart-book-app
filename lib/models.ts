@@ -35,7 +35,7 @@ export interface SlotDetailItem {
 }
 
 export interface TimeSlot {
-  id?: string;
+  id?: string | null;
   name?: string;
   location?: string;
   description?: string;

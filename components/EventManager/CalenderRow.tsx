@@ -36,6 +36,7 @@ const CalendarRow: FC<{
   return (
     <Box
       onMouseDown={(e) => {
+        e.preventDefault();
         if (eventManager.slotEditing !== null) {
           if (e.target !== e.currentTarget) return;
           setEventManager({ ...eventManager, slotEditing: null });
@@ -49,9 +50,11 @@ const CalendarRow: FC<{
         });
       }}
       onMouseMove={(e) => {
+        e.preventDefault();
         send({
           type: "MOUSE_MOVED",
           pos: computeRelativePos(e),
+          date: date,
         });
       }}
       onMouseUp={() =>
@@ -63,13 +66,18 @@ const CalendarRow: FC<{
         padding: 0,
         position: "relative",
         flex: 1,
+        userSelect: "none",
       }}
     >
       {slots.map((slot) => {
         return <EventItem slot={{ ...slot }} key={slot.id} />;
       })}
 
-      <Box>
+      <Box
+        style={{
+          userSelect: "none",
+        }}
+      >
         {Array(23)
           .fill(0)
           .map((_, i) => (
