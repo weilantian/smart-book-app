@@ -8,6 +8,7 @@ import SlotEditPopup from "../Slots/SlotEditPopup";
 import { Text } from "@mantine/core";
 
 import classes from "./EventItem.module.css";
+import bookableMachineAtom from "@/store/bookableMachineStore";
 
 const EventItem: FC<{
   slot: TimeSlot;
@@ -27,11 +28,26 @@ const EventItem: FC<{
     return COL_HEIGHT * (minutes / 60);
   }, [slot]);
 
+  const computeRelativePos = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    return e.clientY - rect.top;
+  };
+
+  const [, send] = useAtom(bookableMachineAtom);
+
   return (
     <SlotEditPopup slot={slot}>
       <Box
         onClick={() => (evManager.slotEditing = slot.id!)}
-        onMouseDown={(e) => e.stopPropagation()}
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          //TODO: React to dragging different borders
+          send({
+            type: "EDIT",
+            slotId: slot.id!,
+            pos: computeRelativePos(e),
+          });
+        }}
         style={{
           top,
           height,

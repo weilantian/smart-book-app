@@ -11,7 +11,9 @@ const bookableMachine = createMachine({
       | { type: "CREATE"; date: Date; pos: number }
       | { type: "MOUSE_MOVED"; pos: number }
       | { type: "MOUSE_UP" }
-      | { type: "NAVIGATE_TO_HOME" },
+      | { type: "NAVIGATE_TO_HOME" }
+      | { type: "EDIT"; slotId: string; pos: number },
+
     context: {} as {
       slots: Array<TimeSlot>;
       newSlot: TimeSlot;
@@ -59,6 +61,19 @@ const bookableMachine = createMachine({
       states: {
         idle: {
           on: {
+            EDIT: {
+              target: "editing",
+              actions: (context, event) => {
+                //TODO: If click and hold on the top, mutate on the start date. If click and hold on the center, move the whole event. If click and hold on the bottom, mutate on the end date.
+                //TODO: We also need to provide cursor feedback to the user.
+                context.newSlot =
+                  context.slots.find((s) => s.id === event.slotId) ??
+                  context.newSlot;
+                context.slots = context.slots.filter(
+                  (s) => s.id !== event.slotId
+                );
+              },
+            },
             CREATE: {
               target: "creating",
               actions: (context, event) => {
@@ -121,7 +136,35 @@ const bookableMachine = createMachine({
             },
           },
         },
-        editing: {},
+        editing: {
+          on: {
+            MOUSE_MOVED: {
+              target: "editing",
+              actions: (context, event) => {
+                const date = computeDateByPosition(
+                  context.dragging.draggingDate,
+                  context.gridHeight,
+                  event.pos
+                );
+                context.newSlot.endTime = date;
+              },
+            },
+            MOUSE_UP: {
+              target: "idle",
+              actions: (context, event) => {
+                context.newSlot.id = uuidV4();
+                context.slots.push(context.newSlot);
+                context.newSlot = {
+                  id: uuidV4(),
+                  name: "Available Slot",
+                  description: "",
+                  startTime: new Date(),
+                  endTime: new Date(),
+                };
+              },
+            },
+          },
+        },
       },
     },
   },

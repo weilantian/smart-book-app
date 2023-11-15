@@ -125,3 +125,7 @@ export const getCurrentUserBookings = async ({
   );
   return schema.parse(response.data);
 };
+
+export const getCurrentUserBookables = async () => {
+  return await axiosInstance.get<Array<Bookable>>("/bookable/user");
+};

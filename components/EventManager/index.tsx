@@ -165,6 +165,7 @@ const EventManager: FC<{
                 position: "relative",
               }}
             >
+              <CurrentTimeMarker />
               <Flex ref={gridRef}>
                 {currentWeek.map((date) => (
                   <CalenderRow
@@ -175,6 +176,7 @@ const EventManager: FC<{
                 ))}
               </Flex>
             </Box>
+            C
           </Box>
         </Box>
       </Stack>

@@ -36,6 +36,7 @@ import dayjs from "dayjs";
 import cx from "clsx";
 
 import classes from "@/styles/IndexPage.module.css";
+import BookableList from "@/components/BookableList";
 
 const CreateBookablePage: NextPage = () => {
   const router = useRouter();
@@ -46,7 +47,7 @@ const CreateBookablePage: NextPage = () => {
   }, [isAuthorized, router]);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(false);
+  const [showLandscapeCalendar, setShowLandscapeCalendar] = useState(true);
 
   const startEndOfCurrentWeek = useMemo(() => {
     const targeStartDate = dayjs(selectedDate ?? new Date())
@@ -101,7 +102,7 @@ const CreateBookablePage: NextPage = () => {
         widgets={
           <Link href="/bookable/create">
             <Button leftSection={<IconPlus size={18} />} size="sm">
-              New Booking
+              New Booking Link
             </Button>
           </Link>
         }
@@ -136,14 +137,20 @@ const CreateBookablePage: NextPage = () => {
               />
             </Box>
           </Collapse>
-
+          <Title mt={4} order={5}>
+            Booking Links
+          </Title>
           <Box
             style={{
+              marginTop: 4,
+              overflowY: "scroll",
               flex: 1,
               flexDirection: "column",
               display: "flex",
             }}
-          ></Box>
+          >
+            <BookableList />
+          </Box>
         </Paper>
         <Paper className={cx(classes.paper, classes.main)}>
           <EventManager

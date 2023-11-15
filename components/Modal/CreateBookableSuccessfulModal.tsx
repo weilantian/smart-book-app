@@ -15,7 +15,6 @@ import {
 } from "@mantine/core";
 
 import { IconCircleCheck } from "@tabler/icons-react";
-import { useRouter } from "next/router";
 import { ComponentProps, FC } from "react";
 
 const CreateBookableSuccessfulModal: FC<
@@ -24,7 +23,6 @@ const CreateBookableSuccessfulModal: FC<
   }
 > = ({ bookable, ...props }) => {
   const theme = useMantineTheme();
-  const router = useRouter();
 
   const { link } = useComputeBookableSharableLink(bookable?.id ?? "");
   return (
