@@ -86,6 +86,9 @@ const bookableMachine = createMachine({
             POPULATE: {
               actions: (context, event) => {
                 context.slots = [
+                  ...context.slots.filter(
+                    (slot) => !event.slots.some((s) => s.id === slot.id)
+                  ),
                   ...event.slots.map((s) => ({
                     ...s,
                     name: "Available slot",

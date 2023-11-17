@@ -27,12 +27,15 @@ import {
 } from "@tabler/icons-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Item: FC<{ bookable: Bookable }> = ({ bookable }) => {
   const theme = useMantineTheme();
   const { link } = useComputeBookableSharableLink(bookable.id ?? "");
   const { hovered, ref } = useHover();
   const queryClient = useQueryClient();
+  const router = useRouter();
   return (
     <Group ref={ref} wrap="nowrap" justify="space-between">
       <Flex>
@@ -106,7 +109,13 @@ const Item: FC<{ bookable: Bookable }> = ({ bookable }) => {
           </Menu.Target>
 
           <Menu.Dropdown>
-            <Menu.Item leftSection={<IconEdit size={14} />}>Edit</Menu.Item>
+            <Menu.Item
+              onClick={() => router.push(`/bookable/edit/${bookable.id}`)}
+              leftSection={<IconEdit size={14} />}
+            >
+              Edit
+            </Menu.Item>
+
             <Menu.Item
               onClick={() => {
                 modals.openConfirmModal({

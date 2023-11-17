@@ -36,24 +36,27 @@ import Head from "next/head";
 import classes from "@/styles/IndexPage.module.css";
 import { useDisclosure, useHotkeys } from "@mantine/hooks";
 import CreateBookableSuccessfulModal from "@/components/Modal/CreateBookableSuccessfulModal";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const CreateBookablePage: NextPage = () => {
+  const queryClient = useQueryClient();
   const [createdBookable, setCreatedBookable] = useState<Bookable | null>(null);
   const [opened, { open, close }] = useDisclosure(false);
 
+  const router = useRouter();
+
   const { mutate, isLoading } = useMutation({
     mutationFn: updateBookable,
+    mutationKey: ["bookables", router.query.id],
     onSuccess({ data }) {
       setCreatedBookable(data);
     },
   });
 
-  const router = useRouter();
-
   const { data } = useQuery({
     queryFn: () => getBookableDetails(router.query.id as string),
-    queryKey: ["bookable", router.query.id],
+    queryKey: ["bookables", router.query.id],
+    refetchOnWindowFocus: false,
   });
 
   const { isAuthorized } = useIsAuthorized();
@@ -93,7 +96,6 @@ const CreateBookablePage: NextPage = () => {
   //TODO: May use useMemo, however nextjs throw a hydration error when using useMemo due to client server time difference
   useEffect(() => {
     if (!state.matches("creatingBookable.idle") && state.context.newSlot.id) {
-      console.log(state.context.newSlot.id);
       setSlotsForRender([...state.context.slots, state.context.newSlot]);
       return;
     }
@@ -119,7 +121,7 @@ const CreateBookablePage: NextPage = () => {
       <Head>
         <title>Create a new booking - Smart Book</title>
       </Head>
-      <EventPageHeader title="Create a new Booking" />
+      <EventPageHeader title="Edit a booking" />
       <div className={classes.inner}>
         <Paper className={cx(classes.paper, classes.sideBar)}>
           <Group gap="xs" align="center">
@@ -194,6 +196,7 @@ const CreateBookablePage: NextPage = () => {
 
                       availableSlots: state.context.slots.map((slot) => {
                         return {
+                          id: slot.id,
                           startTime: slot.startTime,
                           endTime: slot.endTime,
                         };

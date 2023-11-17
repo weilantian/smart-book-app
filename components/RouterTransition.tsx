@@ -24,8 +24,8 @@ const RouterTransition: FC = () => {
     if (router.asPath === "/") {
       send("NAVIGATE_TO_HOME");
     } else if (
-      router.asPath === "/bookable/create" ||
-      router.asPath === "/bookable/edit/[id]"
+      router.pathname === "/bookable/create" ||
+      router.pathname === "/bookable/edit/[id]"
     ) {
       send("CREATE_BOOKABLE");
     }
