@@ -80,7 +80,8 @@ const CreateBookablePage: NextPage = () => {
     setSlotsForRender(
       data.map((slot) => ({
         ...slot,
-        name: `${slot.bookable.name}`,
+        name: `${slot.bookable?.name ?? slot.title}`,
+        description: `${slot.bookable?.description ?? slot.description}`,
         slotDetail: [
           {
             title: "Booked by",
@@ -142,7 +143,7 @@ const CreateBookablePage: NextPage = () => {
           </Title>
           <Box
             style={{
-              marginTop: 4,
+              marginTop: 8,
               overflowY: "scroll",
               flex: 1,
               flexDirection: "column",

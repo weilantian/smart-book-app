@@ -19,7 +19,11 @@ const bookableMachine = createMachine({
           editingMode: "startDate" | "endDate" | "move";
           date: Date;
         }
-      | { type: "DELETE"; slotId: string },
+      | { type: "DELETE"; slotId: string }
+      | {
+          type: "POPULATE";
+          slots: Array<TimeSlot>;
+        },
     context: {} as {
       slots: Array<TimeSlot>;
       newSlot: TimeSlot;
@@ -77,6 +81,16 @@ const bookableMachine = createMachine({
                 context.slots = context.slots.filter(
                   (s) => s.id !== event.slotId
                 );
+              },
+            },
+            POPULATE: {
+              actions: (context, event) => {
+                context.slots = [
+                  ...event.slots.map((s) => ({
+                    ...s,
+                    name: "Available slot",
+                  })),
+                ];
               },
             },
             EDIT: {
@@ -137,6 +151,9 @@ const bookableMachine = createMachine({
                   context.gridHeight,
                   event.pos
                 );
+                if (date.getTime() == context.newSlot.startTime.getTime()) {
+                  return;
+                }
                 context.newSlot.endTime = date;
               },
             },

@@ -121,6 +121,8 @@ export interface BookedSlot extends AttendeeInfo {
   duration: number;
   startTime: Date;
   endTime: Date;
-  bookableId: string;
-  bookable: Partial<Bookable>;
+  bookableId: string | null;
+  bookable: Partial<Bookable> | null;
+  title: string;
+  description: string;
 }

@@ -1,8 +1,8 @@
 import useComputeBookableSharableLink from "@/hooks/useComputeShareableLink";
-import { getCurrentUserBookables } from "@/lib/endpoint";
+import { deleteBookable, getCurrentUserBookables } from "@/lib/endpoint";
 import { Bookable } from "@/lib/models";
 import { computeDurationText } from "@/lib/utils";
-import { IconSetting } from "@douyinfe/semi-icons";
+import { modals } from "@mantine/modals";
 import {
   ActionIcon,
   Box,
@@ -10,6 +10,7 @@ import {
   CopyButton,
   Flex,
   Group,
+  Menu,
   Stack,
   Text,
   useMantineTheme,
@@ -19,16 +20,19 @@ import { notifications } from "@mantine/notifications";
 import {
   IconCheck,
   IconClipboardCopy,
+  IconEdit,
   IconLink,
   IconSettings,
+  IconTrash,
 } from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FC } from "react";
 
 const Item: FC<{ bookable: Bookable }> = ({ bookable }) => {
   const theme = useMantineTheme();
   const { link } = useComputeBookableSharableLink(bookable.id ?? "");
   const { hovered, ref } = useHover();
+  const queryClient = useQueryClient();
   return (
     <Group ref={ref} wrap="nowrap" justify="space-between">
       <Flex>
@@ -46,6 +50,12 @@ const Item: FC<{ bookable: Bookable }> = ({ bookable }) => {
             >
               {computeDurationText(bookable.duration)}
             </Text>
+            <Text
+              style={{
+                color: "var(--mantine-color-gray-6)",
+              }}
+              size="sm"
+            ></Text>
           </Group>
         </Box>
       </Flex>
@@ -85,10 +95,51 @@ const Item: FC<{ bookable: Bookable }> = ({ bookable }) => {
             </ActionIcon>
           )}
         </CopyButton>
+        <Menu width={160}>
+          <Menu.Target>
+            <ActionIcon variant="subtle" aria-label="Settings">
+              <IconSettings
+                style={{ width: "70%", height: "70%" }}
+                stroke={1.5}
+              />
+            </ActionIcon>
+          </Menu.Target>
 
-        <ActionIcon variant="subtle" aria-label="Settings">
-          <IconSettings style={{ width: "70%", height: "70%" }} stroke={1.5} />
-        </ActionIcon>
+          <Menu.Dropdown>
+            <Menu.Item leftSection={<IconEdit size={14} />}>Edit</Menu.Item>
+            <Menu.Item
+              onClick={() => {
+                modals.openConfirmModal({
+                  title: "Delete Bookable",
+                  children: (
+                    <Text>
+                      Are you sure you want to delete this booking link?
+                    </Text>
+                  ),
+                  labels: {
+                    confirm: "Delete",
+                    cancel: "Cancel",
+                  },
+                  onConfirm: () => {
+                    deleteBookable(bookable.id ?? "").then(() => {
+                      queryClient.invalidateQueries({
+                        queryKey: ["bookables"],
+                      });
+                      notifications.show({
+                        title: "Bookable deleted",
+                        message: "The bookable has been deleted.",
+                      });
+                    });
+                  },
+                });
+              }}
+              color="red"
+              leftSection={<IconTrash size={14} />}
+            >
+              Delete
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </Group>
     </Group>
   );

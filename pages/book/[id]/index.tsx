@@ -1,4 +1,4 @@
-import { getBookableDetails, scheduleBooking } from "@/lib/endpoint";
+import { getBookable, scheduleBooking } from "@/lib/endpoint";
 import { AttendeeInfo, Bookable, BookingDetail, Slot } from "@/lib/models";
 import { computeDurationText } from "@/lib/utils";
 import {
@@ -314,7 +314,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const id = params?.id as string;
   if (!id) throw new Error("No id provided");
 
-  const response = await getBookableDetails(id);
+  const response = await getBookable(id);
 
   // Serialize the response by converting date string to Date object
 

@@ -10,7 +10,7 @@ import {
   Title,
 } from "@mantine/core";
 import { IconHeading, IconLocation } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Button } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Bookable } from "@/lib/models";
@@ -26,9 +26,10 @@ interface BookableInfoFormValues {
 }
 
 const BookableInfoForm: FC<{
+  initialValues?: Partial<Bookable>;
   onSubmit: (data: Partial<Bookable>) => void;
   isLoading?: boolean;
-}> = ({ onSubmit, isLoading }) => {
+}> = ({ onSubmit, isLoading, initialValues }) => {
   const form = useForm<BookableInfoFormValues>({
     initialValues: {
       name: "",
@@ -37,8 +38,12 @@ const BookableInfoForm: FC<{
       hours: 0,
       minutes: 30,
       type: "ONE_TIME",
+      ...initialValues,
     },
   });
+
+  useEffect(() => form.setValues({ ...initialValues }), [initialValues]);
+
   return (
     <form
       onSubmit={form.onSubmit((data) => {

@@ -86,7 +86,13 @@ export const getEvent = (eventId: string) =>
 export const createBookable = (bookable: Bookable) =>
   axiosInstance.post<Bookable>("/bookable/", bookable);
 
-export const getBookableDetails = (id: string) =>
+export const updateBookable = (bookable: Bookable) =>
+  axiosInstance.post<Bookable>(`/bookable/${bookable.id}`, bookable);
+
+export const deleteBookable = (bookableId: string) =>
+  axiosInstance.delete(`/bookable/${bookableId}`);
+
+export const getBookable = (id: string) =>
   axiosInstance.get<Bookable>(`/bookable/${id}`);
 
 export const scheduleBooking = (
@@ -113,11 +119,15 @@ export const getCurrentUserBookings = async ({
       duration: z.number(),
       startTime: z.string().transform((val) => new Date(val)),
       endTime: z.string().transform((val) => new Date(val)),
-      bookableId: z.string(),
-      bookable: z.object({
-        id: z.string(),
-        name: z.string(),
-      }),
+      bookableId: z.string().nullable(),
+      bookable: z
+        .object({
+          id: z.string(),
+          name: z.string(),
+        })
+        .nullable(),
+      title: z.string(),
+      description: z.string(),
       attendeeFirstName: z.string(),
       attendeeLastName: z.string(),
       attendeeEmail: z.string(),
@@ -128,4 +138,17 @@ export const getCurrentUserBookings = async ({
 
 export const getCurrentUserBookables = async () => {
   return await axiosInstance.get<Array<Bookable>>("/bookable/user");
+};
+
+export const getBookableDetails = async (id: string) => {
+  const response = await axiosInstance.get<Bookable>(`/bookable/${id}/details`);
+  const bookable: Bookable = {
+    ...response.data,
+    availableSlots: response.data.availableSlots.map((slot) => ({
+      ...slot,
+      startTime: new Date(slot.startTime),
+      endTime: new Date(slot.endTime),
+    })),
+  };
+  return bookable;
 };

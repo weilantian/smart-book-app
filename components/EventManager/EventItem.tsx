@@ -15,7 +15,6 @@ const EventItem: FC<{
   slot: TimeSlot;
 }> = ({ slot }) => {
   const [evManager, setEvManager] = useAtom(eventManagerStore);
-  useEffect(() => console.log(evManager), [evManager]);
 
   const top = useMemo(() => {
     const hour = slot.startTime.getHours();

@@ -63,6 +63,7 @@ const SlotEditPopup: FC<PropsWithChildren<{ slot: TimeSlot }>> = ({
           {slot.slotDetail &&
             slot.slotDetail.map((item) => (
               <Group
+                key={item.title}
                 mt={4}
                 style={{ color: "var(--mantine-color-gray-5" }}
                 gap={5}
