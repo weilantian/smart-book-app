@@ -30,7 +30,10 @@ import { FC } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const Item: FC<{ bookable: Bookable }> = ({ bookable }) => {
+const Item: FC<{ bookable: Bookable; onDelate: () => void }> = ({
+  bookable,
+  onDelate,
+}) => {
   const theme = useMantineTheme();
   const { link } = useComputeBookableSharableLink(bookable.id ?? "");
   const { hovered, ref } = useHover();
@@ -131,9 +134,7 @@ const Item: FC<{ bookable: Bookable }> = ({ bookable }) => {
                   },
                   onConfirm: () => {
                     deleteBookable(bookable.id ?? "").then(() => {
-                      queryClient.invalidateQueries({
-                        queryKey: ["bookables"],
-                      });
+                      onDelate();
                       notifications.show({
                         title: "Bookable deleted",
                         message: "The bookable has been deleted.",
@@ -155,14 +156,14 @@ const Item: FC<{ bookable: Bookable }> = ({ bookable }) => {
 };
 
 const BookableList: FC = () => {
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["bookables"],
     queryFn: getCurrentUserBookables,
   });
   return (
     <Stack>
       {data?.data.map((bookable) => (
-        <Item key={bookable.id} bookable={bookable} />
+        <Item onDelate={refetch} key={bookable.id} bookable={bookable} />
       ))}
     </Stack>
   );
