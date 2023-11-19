@@ -200,7 +200,6 @@ const EventManager: FC<{
                 ))}
               </Flex>
             </Box>
-            C
           </Box>
         </Box>
       </Stack>
