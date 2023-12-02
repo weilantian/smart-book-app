@@ -6,7 +6,7 @@ import { modals } from "@mantine/modals";
 import {
   ActionIcon,
   Box,
-  Button,
+  LoadingOverlay,
   CopyButton,
   Flex,
   Group,
@@ -156,12 +156,22 @@ const Item: FC<{ bookable: Bookable; onDelate: () => void }> = ({
 };
 
 const BookableList: FC = () => {
-  const { data, refetch } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ["bookables"],
     queryFn: getCurrentUserBookables,
   });
   return (
-    <Stack>
+    <Stack
+      style={{
+        flex: 1,
+      }}
+      pos="relative"
+    >
+      <LoadingOverlay
+        visible={isLoading}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+      />
       {data?.data.map((bookable) => (
         <Item onDelate={refetch} key={bookable.id} bookable={bookable} />
       ))}
