@@ -8,6 +8,7 @@ import {
   Bookable,
   ScheduleBookingInput,
   BookedSlot,
+  BookingDetail,
 } from "./models";
 import { z } from "zod";
 
@@ -93,7 +94,7 @@ export const deleteBookable = (bookableId: string) =>
   axiosInstance.delete(`/bookable/${bookableId}`);
 
 export const getBookable = (id: string) =>
-  axiosInstance.get<Bookable>(`/bookable/${id}`);
+  axiosInstance.get<BookingDetail>(`/bookable/${id}`);
 
 //TODO: Add type definition for the response
 export const scheduleBooking = async (

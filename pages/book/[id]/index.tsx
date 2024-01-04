@@ -5,9 +5,9 @@ import {
   BookingDetail,
   Slot,
 } from "@/lib/models";
-import { Box } from "@mantine/core";
+import { Box, Loader, LoadingOverlay } from "@mantine/core";
 
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
@@ -19,8 +19,18 @@ import SlotsBlock from "@/components/Book/SlotsBlock";
 import { useDisclosure } from "@mantine/hooks";
 import BookingSuccessfulModal from "@/components/Modal/BookingSuccessfulModal";
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
 
-const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
+const BookingPage: NextPage = () => {
+  const router = useRouter();
+
+  const { id } = router.query;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["bookable", id],
+    queryFn: () => getBookable(id as string),
+  });
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<{
     start: Date;
@@ -37,15 +47,17 @@ const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
   }, [bookedBookingDetail, open]);
 
   const availableSlots = useMemo<Array<Slot>>(() => {
+    if (!data?.data.slots) return [];
+
     const bookingSlotSchema = z.array(
       z.object({
         start: z.string().transform((val) => new Date(val)),
         end: z.string().transform((val) => new Date(val)),
       })
     );
-    const slots = bookingSlotSchema.parse(bookable.slots);
+    const slots = bookingSlotSchema.parse(data?.data.slots);
     return slots;
-  }, [bookable]);
+  }, [data]);
 
   const availableDates = useMemo(
     () =>
@@ -68,14 +80,12 @@ const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
 
   const handleScheduleBooking = (attendeeInfo: AttendeeInfo) => {
     if (!selectedSlot) return;
-    scheduleBooking(bookable.id!, {
+    scheduleBooking(data?.data.id!, {
       ...attendeeInfo,
       startTime: selectedSlot?.start.toISOString(),
       endTime: selectedSlot?.end.toISOString(),
     }).then((res) => setBookedBookingDetail(res));
   };
-
-  const router = useRouter();
 
   return (
     <Box className={classes.wrapper}>
@@ -87,13 +97,22 @@ const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
         bookingDetail={bookedBookingDetail!}
       />
       <Box className={classes.container}>
-        <BasicInfoBlock
-          resetSelectedSlot={() => {
-            setSelectedSlot(null);
-          }}
-          bookable={bookable}
-          selectedSlot={selectedSlot}
+        <LoadingOverlay
+          visible={isLoading}
+          zIndex={1000}
+          overlayProps={{ radius: "sm", blur: 2 }}
         />
+
+        {!isLoading && (
+          <BasicInfoBlock
+            resetSelectedSlot={() => {
+              setSelectedSlot(null);
+            }}
+            bookable={data?.data!}
+            selectedSlot={selectedSlot}
+          />
+        )}
+
         {dateTimeFinalized && (
           <AttendeeFormBlock onSubmit={handleScheduleBooking} />
         )}
@@ -125,20 +144,38 @@ const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const id = params?.id as string;
-  if (!id) throw new Error("No id provided");
+// export const getStaticPaths = async () => {}
 
-  const response = await getBookable(id);
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   const id = params?.id as string;
+//   if (!id) throw new Error("No id provided");
 
-  // Serialize the response by converting date string to Date object
+//   const response = await getBookable(id);
 
-  if (!response) return { notFound: true, props: {} };
-  return {
-    props: {
-      bookable: response.data,
-    },
-  };
-};
+//   // Serialize the response by converting date string to Date object
+
+//   if (!response) return { notFound: true, props: {} };
+//   return {
+//     props: {
+//       bookable: response.data,
+//     },
+//   };
+// };
+
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   const id = params?.id as string;
+//   if (!id) throw new Error("No id provided");
+
+//   const response = await getBookable(id);
+
+//   // Serialize the response by converting date string to Date object
+
+//   if (!response) return { notFound: true, props: {} };
+//   return {
+//     props: {
+//       bookable: response.data,
+//     },
+//   };
+// };
 
 export default BookingPage;
