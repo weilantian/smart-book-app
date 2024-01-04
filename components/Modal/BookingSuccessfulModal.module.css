@@ -1,0 +1,19 @@
+.detailCard {
+  margin-top: var(--mantine-spacing-md);
+  padding: 10px 14px;
+  display: flex;
+  border-radius: var(--mantine-radius-sm);
+  border: 1px solid var(--mantine-color-gray-2);
+  gap: var(--mantine-spacing-lg);
+}
+
+.detailCardIconContainer {
+  background-color: var(--mantine-color-blue-1);
+  color: var(--mantine-color-blue-5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 42px 80px;
+  border-radius: var(--mantine-radius-md);
+  border: 1px solid var(--mantine-color-gray-2);
+}

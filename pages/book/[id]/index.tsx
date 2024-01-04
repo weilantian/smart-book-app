@@ -1,9 +1,14 @@
 import { getBookable, scheduleBooking } from "@/lib/endpoint";
-import { AttendeeInfo, BookingDetail, Slot } from "@/lib/models";
+import {
+  AttendeeBookingDetail,
+  AttendeeInfo,
+  BookingDetail,
+  Slot,
+} from "@/lib/models";
 import { Box } from "@mantine/core";
 
 import { GetServerSideProps, NextPage } from "next";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 
 import classes from "@/styles/BookPage.module.css";
@@ -11,6 +16,9 @@ import BasicInfoBlock from "@/components/Book/BasicInfoBlock";
 import AttendeeFormBlock from "@/components/Book/AttendeeFormBlock";
 import CalendarBlock from "@/components/Book/CalendarBlock";
 import SlotsBlock from "@/components/Book/SlotsBlock";
+import { useDisclosure } from "@mantine/hooks";
+import BookingSuccessfulModal from "@/components/Modal/BookingSuccessfulModal";
+import { useRouter } from "next/router";
 
 const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -18,6 +26,15 @@ const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
     start: Date;
     end: Date;
   } | null>(null);
+
+  const [bookedBookingDetail, setBookedBookingDetail] =
+    useState<AttendeeBookingDetail | null>(null);
+
+  const [opened, { open, close }] = useDisclosure(false);
+
+  useEffect(() => {
+    if (bookedBookingDetail) open();
+  }, [bookedBookingDetail, open]);
 
   const availableSlots = useMemo<Array<Slot>>(() => {
     const bookingSlotSchema = z.array(
@@ -55,11 +72,20 @@ const BookingPage: NextPage<{ bookable: BookingDetail }> = ({ bookable }) => {
       ...attendeeInfo,
       startTime: selectedSlot?.start.toISOString(),
       endTime: selectedSlot?.end.toISOString(),
-    }).then((res) => console.log(res));
+    }).then((res) => setBookedBookingDetail(res));
   };
+
+  const router = useRouter();
 
   return (
     <Box className={classes.wrapper}>
+      <BookingSuccessfulModal
+        onClose={() => {
+          close();
+        }}
+        opened={opened}
+        bookingDetail={bookedBookingDetail!}
+      />
       <Box className={classes.container}>
         <BasicInfoBlock
           resetSelectedSlot={() => {

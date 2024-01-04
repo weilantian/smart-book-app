@@ -126,3 +126,14 @@ export interface BookedSlot extends AttendeeInfo {
   title: string;
   description: string;
 }
+
+export interface AttendeeBookingDetail {
+  attendeeBookingReferenceCode: string;
+  duration: number;
+  startTime: Date;
+  endTime: Date;
+  bookable: {
+    name: string;
+    location: string;
+  };
+}

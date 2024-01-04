@@ -95,10 +95,27 @@ export const deleteBookable = (bookableId: string) =>
 export const getBookable = (id: string) =>
   axiosInstance.get<Bookable>(`/bookable/${id}`);
 
-export const scheduleBooking = (
+//TODO: Add type definition for the response
+export const scheduleBooking = async (
   bookableId: string,
   scheduleBookingInput: ScheduleBookingInput
-) => axiosInstance.post(`/bookable/${bookableId}/book`, scheduleBookingInput);
+) => {
+  const response = await axiosInstance.post(
+    `/bookable/${bookableId}/book`,
+    scheduleBookingInput
+  );
+  const schema = z.object({
+    attendeeBookingReferenceCode: z.string(),
+    duration: z.number(),
+    endTime: z.string().transform((val) => new Date(val)),
+    startTime: z.string().transform((val) => new Date(val)),
+    bookable: z.object({
+      location: z.string(),
+      name: z.string(),
+    }),
+  });
+  return schema.parse(response.data);
+};
 
 export const getCurrentUserBookings = async ({
   startDate,
