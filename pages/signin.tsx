@@ -81,7 +81,9 @@ const LoginPage: NextPage = () => {
             })}
           >
             <Stack>
-              <Button>Sign in with Google</Button>
+              <Button onClick={() => router.push("/demo")}>
+                Sign in with Demo Account
+              </Button>
               <TextInput
                 onChange={(e) =>
                   form.setFieldValue("email", e.currentTarget.value)
