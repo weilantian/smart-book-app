@@ -15,6 +15,7 @@ import { Button } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Bookable } from "@/lib/models";
 import { calculateDuration } from "@/lib/utils";
+import classes from "./BookableInfoForm.module.css";
 
 interface BookableInfoFormValues {
   name: string;
@@ -104,15 +105,11 @@ const BookableInfoForm: FC<{
           ]}
           {...form.getInputProps("type")}
         />
-        <Button
-          loading={isLoading}
-          style={{
-            marginTop: 8,
-          }}
-          type="submit"
-        >
-          Save & Copy Link
-        </Button>
+        <Box className={classes.submitButtonContainer}>
+          <Button fullWidth loading={isLoading} type="submit">
+            Save & Copy Link
+          </Button>
+        </Box>
       </Stack>
     </form>
   );

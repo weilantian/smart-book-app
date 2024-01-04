@@ -45,6 +45,7 @@
   flex-direction: column;
   width: 320px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .main {

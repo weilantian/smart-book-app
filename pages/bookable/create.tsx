@@ -123,6 +123,7 @@ const CreateBookablePage: NextPage = () => {
           <Box
             style={{
               overflowY: "scroll",
+
               flex: 1,
               flexDirection: "column",
               display: "flex",
