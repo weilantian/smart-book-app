@@ -81,7 +81,7 @@ const SlotList: FC<{ slots: Array<TimeSlot> }> = ({ slots }) => {
   if (slots.length === 0) {
     return (
       <Alert variant="light" color="blue" title="Block out available slots">
-        Start by dargging on the calendar to block out available slots
+        Start by dragging on the calendar to block out available slots
       </Alert>
     );
   }
