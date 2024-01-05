@@ -20,6 +20,7 @@ import { useDisclosure } from "@mantine/hooks";
 import BookingSuccessfulModal from "@/components/Modal/BookingSuccessfulModal";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
+import Head from "next/head";
 
 const BookingPage: NextPage = () => {
   const router = useRouter();
@@ -89,6 +90,11 @@ const BookingPage: NextPage = () => {
 
   return (
     <Box className={classes.wrapper}>
+      <Head>
+        <title>
+          {data?.data.name ? `${data?.data.name} - ` : ``}SmartBook Booking
+        </title>
+      </Head>
       <BookingSuccessfulModal
         onClose={() => {
           close();
