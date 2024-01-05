@@ -2,6 +2,7 @@ import { Slot } from "@/lib/models";
 import { Box, Title, Stack, Text, UnstyledButton } from "@mantine/core";
 import { FC } from "react";
 import classes from "@/styles/BookPage.module.css";
+import { format } from "date-fns";
 
 const SlotItem: FC<{ slot: Slot; onClick: (slot: Slot) => void }> = ({
   slot,
@@ -9,7 +10,7 @@ const SlotItem: FC<{ slot: Slot; onClick: (slot: Slot) => void }> = ({
 }) => {
   return (
     <UnstyledButton onClick={() => onClick(slot)} className={classes.slotItem}>
-      {slot.start.toLocaleTimeString()} - {slot.end.toLocaleTimeString()}
+      {format(slot.start, "hh:mm")} - {format(slot.end, "hh:mm")}
     </UnstyledButton>
   );
 };
