@@ -39,7 +39,7 @@ const UserWidget: FC = () => {
         <Menu.Item>Settings</Menu.Item>
         <Menu.Item
           onClick={() => {
-            window.localStorage.removeItem("token");
+            window.localStorage.removeItem("smart_book_token");
             router.push("/signin");
           }}
         >
