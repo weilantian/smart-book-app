@@ -10,7 +10,7 @@ const SlotItem: FC<{ slot: Slot; onClick: (slot: Slot) => void }> = ({
 }) => {
   return (
     <UnstyledButton onClick={() => onClick(slot)} className={classes.slotItem}>
-      {format(slot.start, "h:mm a..aa")} - {format(slot.end, "h:mm a..aa")}
+      {format(slot.start, "h:mm a")} - {format(slot.end, "h:mm a")}
     </UnstyledButton>
   );
 };
