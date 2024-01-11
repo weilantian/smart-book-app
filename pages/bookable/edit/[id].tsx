@@ -37,6 +37,7 @@ import classes from "@/styles/IndexPage.module.css";
 import { useDisclosure, useHotkeys } from "@mantine/hooks";
 import CreateBookableSuccessfulModal from "@/components/Modal/CreateBookableSuccessfulModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { calculateHoursAndMinutes } from "@/lib/utils";
 
 const CreateBookablePage: NextPage = () => {
   const queryClient = useQueryClient();
@@ -59,6 +60,12 @@ const CreateBookablePage: NextPage = () => {
     refetchOnWindowFocus: false,
   });
 
+  const formattedFormData = useMemo(() => {
+    if (typeof data === "undefined") return;
+    const { duration, ...bookable } = data;
+    return { ...bookable, ...calculateHoursAndMinutes(duration) };
+  }, [data]);
+
   const { isAuthorized } = useIsAuthorized();
   useEffect(() => {
     if (isAuthorized) return;
@@ -71,20 +78,26 @@ const CreateBookablePage: NextPage = () => {
 
   const [state, send] = useAtom(bookableMachineAtom);
 
-  useEffect(() => {
-    if (!data) return;
-    // Set the date to the date closest to today
-    const today = new Date();
-    const closestDate = data.availableSlots.reduce((prev, curr) => {
+  const computeClosetDateOfSlots = (slots: Array<TimeSlot>) => {
+    const now = new Date();
+    if (!slots.length) return now;
+    const closestDate = slots.reduce((prev, curr) => {
       const prevDiff = Math.abs(
-        new Date(prev.startTime).getTime() - today.getTime()
+        new Date(prev.startTime).getTime() - now.getTime()
       );
       const currDiff = Math.abs(
-        new Date(curr.startTime).getTime() - today.getTime()
+        new Date(curr.startTime).getTime() - now.getTime()
       );
       return prevDiff < currDiff ? prev : curr;
     });
-    setSelectedDate(new Date(closestDate.startTime));
+    return closestDate.startTime;
+  };
+
+  useEffect(() => {
+    if (!data) return;
+    // Set the date to the date closest to today
+
+    setSelectedDate(computeClosetDateOfSlots(data.availableSlots));
     send({
       type: "POPULATE",
       slots: data.availableSlots,
@@ -188,7 +201,7 @@ const CreateBookablePage: NextPage = () => {
                 <SlotList slots={slotsForRender} />
                 <Divider my="sm" />
                 <BookableInfoForm
-                  initialValues={data}
+                  initialValues={formattedFormData}
                   isLoading={isLoading}
                   onSubmit={(data) => {
                     mutate({

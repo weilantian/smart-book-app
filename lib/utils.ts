@@ -51,6 +51,12 @@ export const calculateDuration = ({
   minutes: number;
 }) => (hours * 60 + minutes) * 60 * 1000;
 
+export const calculateHoursAndMinutes = (duration: number) => {
+  const minutes = Math.floor(duration / 1000 / 60);
+  const hours = Math.floor(minutes / 60);
+  return { hours, minutes: minutes % 60 };
+};
+
 export const computeDurationText = (duration: number) => {
   const minutes = Math.floor(duration / 1000 / 60);
   const hours = Math.floor(minutes / 60);
